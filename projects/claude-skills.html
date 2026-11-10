@@ -1,0 +1,53 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude skills and AI workflow | Nick Brown</title><meta name="description" content="11+ custom Claude skills that encode how I actually do recurring work, a context file so every session starts with my accounts and rules, and connectors for live data.">
+<link rel="stylesheet" href="../assets/site.css"></head><body><nav class="nav"><div class="in"><a class="brand" href="../index.html">Nick Brown</a>
+<div class="links"><a href="../index.html#projects">Projects</a><a href="../index.html#how">How I use AI</a><a href="../code/">Code</a><a href="../index.html#contact">Contact</a></div></div></nav>
+<main class="wrap">
+<div class="crumb"><a href="../index.html#projects">&larr; All projects</a></div>
+<div class="ph"><div class="eyebrow">Case study</div><h1>Claude skills and AI workflow</h1><p>11+ custom Claude skills that encode how I actually do recurring work, a context file so every session starts with my accounts and rules, and connectors for live data.</p>
+<div class="tags"><span class="tag">Claude</span><span class="tag">AI enablement</span><span class="tag">Prompting</span><span class="tag">MCP</span></div><div class="cta"><a class="btn" href="#" data-ask="Claude skills and AI workflow">Ask the bot about this</a></div></div>
+<div class="cols"><article class="body">
+<h2>Why skills</h2>
+<p>Most of a channel manager's week repeats: read the POS, vet an applicant, write the escalation, build the account plan, send the weekly report. A good prompt helps once. A skill helps every time, because it holds the steps, the format and the judgment calls I would otherwise retype.</p>
+<h2>What I built</h2>
+<ul>
+<li><b>pos-analysis</b>: reads distributor POS, flags spikes, drops and gaps, leads with the "so what" and compares YoY and QoQ.</li>
+<li><b>partner-vetting</b>: qualifying questions, red flags and an approve, hold or decline call with a one-line reason. Try it below.</li>
+<li><b>account-planning</b>, <b>weekly-activity-report</b>, <b>escalation-email</b>, <b>contact-finder</b>, <b>cold-email</b>, <b>copy-editing</b>, <b>sales-enablement</b>.</li>
+<li>A branded slide skill for QBR decks, and writing-style skills that strip filler and hype.</li>
+</ul>
+<p>A context file loads at the start of every session: the channel model, the distributors, my accounts, current priorities and my writing rules. I stopped re-explaining my job to the model.</p>
+<p>Connectors brought in live data. A ZoomInfo connection enriched about 230 contacts across 95 accounts. I also vetted a set of public skills and passed them to my manager for the team.</p>
+<div class="demo" id="vetting">
+<h3>Try it: partner vetting, the way the skill does it</h3>
+<div class="sub">A fictional inbound reseller. Tick what you verified. The rules are the ones I used.</div>
+<div class="row"><label>Program asked for <select id="vtTier"><option>Registered</option><option>Preferred</option><option>Distributor / VAD</option></select></label></div>
+<div class="row" style="flex-direction:column;align-items:flex-start;gap:6px">
+<label><input type="checkbox" id="vtPos"> Distributor shows real buying activity (not just their word)</label>
+<label><input type="checkbox" id="vtDeal"> Real opportunity behind the application</label>
+<label><input type="checkbox" id="vtComp"> Sells a competing product line</label>
+<label><input type="checkbox" id="vtGeo"> Outside our coverage area</label>
+<label><input type="checkbox" id="vtSmall"> Claims don't match their size</label>
+<label><input type="checkbox" id="vtVendor"> Reads like a marketing vendor pitch, not a reseller</label>
+</div>
+<div class="out" id="vtOut"></div>
+</div>
+<h2>How I work with it</h2>
+<p>I treat the model like a sharp new hire. I give it context and rules, I review its work, and I check numbers against the source before anything goes out. When it gets something wrong twice, the fix goes into the skill, not into my memory.</p>
+</article>
+<aside class="side"><div class="box"><h4>At a glance</h4><div class="kpis"><div><b>11+</b><span>custom skills</span></div><div><b>1</b><span>shared context file</span></div><div><b>~230</b><span>contacts enriched via MCP</span></div><div><b>95</b><span>accounts enriched</span></div></div></div>
+<div class="box"><h4>Context</h4>Built while managing the long-tail reseller book at a network test and security tools vendor that sells only through two-tier distribution. Names and numbers in demos are synthetic.</div></aside></div>
+<div class="next"><a href="segmentation.html">&larr; Recency segments and honest attribution</a><a href="offer-builder.html">Salon offer builder &rarr;</a></div>
+</main><footer><div class="wrap">Built by Nick Brown with Claude. All demo data is synthetic. Hosted free on GitHub Pages.</div></footer>
+<script src="../assets/bot.js" data-base="../"></script><script>
+function vt(){const g=id=>document.getElementById(id).checked,tier=document.getElementById('vtTier').value;let v,why;
+if(g('vtGeo')){v='Decline';why='Outside coverage. Point them to the right region.'}
+else if(g('vtVendor')){v='Decline';why='This is a vendor pitch, not a reseller application.'}
+else if(tier==='Distributor / VAD'&&!g('vtPos')){v='Hold';why='Treat as a reseller inquiry first. Ask them to buy through existing distribution.'}
+else if(!g('vtPos')&&!g('vtDeal')){v='Hold';why='Nothing verified yet. Send open qualifying questions and check distributor activity.'}
+else if(g('vtSmall')||g('vtComp')){v='Hold';why=(g('vtComp')?'Competing line in the bag. ':'')+(g('vtSmall')?'Too small for its claims. ':'')+'Revisit after a verified deal.'}
+else if(tier==='Preferred'&&!(g('vtPos')&&g('vtDeal'))){v='Hold';why='Preferred needs both verified history and a live deal.'}
+else{v='Approve';why=`Verified activity${g('vtDeal')?' and a real deal behind it':''}. Approve as ${tier}.`}
+document.getElementById('vtOut').innerHTML=`<div class="verdict v-${v.toLowerCase()}">${v}</div>${why}<div style="font-size:12px;color:#64748b;margin-top:6px">Rule: never approve on self-reported answers. Verify distributor activity, ask open questions only.</div>`}
+document.querySelectorAll('#vetting input,#vetting select').forEach(e=>e.onchange=vt);vt();
+</script></body></html>

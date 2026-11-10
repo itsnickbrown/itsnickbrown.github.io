@@ -1,0 +1,31 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daily POS tracker and month-end projection | Nick Brown</title><meta name="description" content="A one-click morning update that scrubs distributor files, updates the ledger and redraws the tracker. The projection paces the month against how that month normally books.">
+<link rel="stylesheet" href="../assets/site.css"></head><body><nav class="nav"><div class="in"><a class="brand" href="../index.html">Nick Brown</a>
+<div class="links"><a href="../index.html#projects">Projects</a><a href="../index.html#how">How I use AI</a><a href="../code/">Code</a><a href="../index.html#contact">Contact</a></div></div></nav>
+<main class="wrap">
+<div class="crumb"><a href="../index.html#projects">&larr; All projects</a></div>
+<div class="ph"><div class="eyebrow">Case study</div><h1>Daily POS tracker and month-end projection</h1><p>A one-click morning update that scrubs distributor files, updates the ledger and redraws the tracker. The projection paces the month against how that month normally books.</p>
+<div class="tags"><span class="tag">Python</span><span class="tag">Forecasting</span><span class="tag">Automation</span><span class="tag">Dashboard</span></div><div class="cta"><a class="btn primary" href="../demos/tracker.html">Open the live demo</a><a class="btn" href="#" data-ask="Daily POS tracker and month-end projection">Ask the bot about this</a></div></div>
+<div class="cols"><article class="body">
+<h2>The problem</h2>
+<p>The corporate POS report came out monthly. By the time it landed, the month was over. I wanted to know mid-month whether we were on pace, and which partners had bought since yesterday.</p>
+<h2>What I built</h2>
+<p>A batch file runs the chain each morning:</p>
+<pre><code>python pos_scrubber.py --folder .     # detect each distributor file, match resellers, flag new names
+python tracker.py                     # read snapshots, update charts and KPIs
+start partner_tracker.html</code></pre>
+<p>The scrubber auto-detects which distributor a file came from, fuzzy matches reseller names, applies the named-account exclusion and flags names it has never seen. The tracker then shows daily new revenue, MTD by month, partners added through the month, and the top purchases.</p>
+<h2>The projection</h2>
+<p>A flat run rate is wrong most months. July back-loads: its last few days can be a third of the month. August front-loads. So the projection divides month-to-date revenue by the share a normal month has booked by the same business day. The curve per month comes from five years of history.</p>
+<pre><code>share = curve[min(elapsed, len(curve)) - 1]
+projection = mtd / share if elapsed &gt;= 3 else None   # too early to trust</code></pre>
+<p>Monthly forecast workbooks carried bear, base and bull cases. When a month slowed in the back half, I lowered the base case.</p>
+<h2>How AI fit in</h2>
+<p>Claude helped write the scrubber and the tracker. The judgment calls were mine: when to distrust a number, how to handle credits, when a projection has too few days behind it to show.</p>
+<p>Source: <a href="../code/build_tracker_demo.py">build_tracker_demo.py</a> (public rebuild of the tracker), <a href="../code/Update_Tracker.bat">Update_Tracker.bat</a>, <a href="../code/longtail_dashboard.py">longtail_dashboard.py</a>.</p>
+</article>
+<aside class="side"><div class="box"><h4>At a glance</h4><div class="kpis"><div><b>1</b><span>click to update</span></div><div><b>110+</b><span>daily snapshots read</span></div><div><b>3</b><span>forecast cases</span></div><div><b>5 yrs</b><span>of seasonal history</span></div></div></div>
+<div class="box"><h4>Context</h4>Built while managing the long-tail reseller book at a network test and security tools vendor that sells only through two-tier distribution. Names and numbers in demos are synthetic.</div></aside></div>
+<div class="next"><a href="partner-insights.html">&larr; Partner Insights page</a><a href="ledger-cleanup.html">Finding and fixing bad POS data &rarr;</a></div>
+</main><footer><div class="wrap">Built by Nick Brown with Claude. All demo data is synthetic. Hosted free on GitHub Pages.</div></footer>
+<script src="../assets/bot.js" data-base="../"></script></body></html>

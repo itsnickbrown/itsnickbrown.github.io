@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Salon Offer Builder | Demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+/* Brochure look: white page, grey product tiles, black uppercase headings, one accent color on section bars and prices only */
+:root{
+  --bg:#ffffff; --surface:#ffffff; --tile:#eeeeee; --ink:#111111; --muted:#5f5f5f; --line:#dcdcdc;
+  --accent:#1f5f6b; --accent-soft:#e8f1f2; --good:#2f7d4f; --warn:#a66a00;
+  --display:"Archivo",Helvetica,Arial,sans-serif; --body:"Source Sans 3",Helvetica,Arial,sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.45}
+h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance}
+.wrap{max-width:1180px;margin:0 auto;padding:20px 16px 48px;display:flex;flex-direction:column;gap:16px}
+header.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px}
+header.top h1{font-size:26px;font-weight:800;letter-spacing:-.01em}
+header.top p{margin:4px 0 0;color:var(--muted)}
+.banner{background:var(--accent-soft);border:1px solid var(--line);border-radius:10px;padding:10px 14px;font-size:14px;color:var(--ink)}
+.banner b{color:var(--accent)}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;border-bottom:1px solid var(--line)}
+.tab{background:none;border:none;border-bottom:3px solid transparent;padding:10px 14px;font:600 15px var(--body);color:var(--muted);cursor:pointer}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.tab:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.panel{display:none}.panel.on{display:block}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px}
+.salon{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+label{display:flex;flex-direction:column;gap:4px;font-size:13px;font-weight:600;color:var(--muted)}
+input,select{font:16px var(--body);color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:9px 10px}
+.grid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(300px,1fr);gap:16px;align-items:start}
+@media (max-width:860px){.grid{grid-template-columns:1fr}}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.chip{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:999px;padding:5px 11px;font:600 13px var(--body);cursor:pointer;display:flex;align-items:center;gap:6px}
+.chip .dot{width:8px;height:8px;border-radius:50%;background:var(--line)}
+.chip.sel .dot{background:var(--good)}
+.chip.cur{border-color:var(--accent);background:var(--accent-soft)}
+.step-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.step-head h2{font-size:24px}
+.stepno{font-size:13px;color:var(--muted);font-weight:600}
+.fam{font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
+.desc{color:var(--muted);margin:6px 0 14px;max-width:62ch}
+.qtyrow{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:6px}
+.qty{min-width:64px;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:700 17px var(--display);cursor:pointer;font-variant-numeric:tabular-nums}
+.qty[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--surface)}
+.qty.none{font:600 14px var(--body)}
+.hint{font-size:14px;color:var(--muted);min-height:20px}
+.mod{margin-top:14px;border-top:1px solid var(--line);padding-top:12px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.mod h3{font-size:14px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.mod ul{margin:0;padding:0;list-style:none;font-size:14px}
+.mod li{padding:3px 0;display:flex;gap:8px}
+.mod li .n{min-width:22px;font-weight:700;font-variant-numeric:tabular-nums;color:var(--accent)}
+.flag{display:inline-block;font-size:12px;font-weight:700;padding:2px 8px;border-radius:999px;background:color-mix(in srgb,var(--warn) 18%,transparent);color:var(--warn);margin-left:6px;vertical-align:middle}
+.nav{display:flex;justify-content:space-between;gap:10px;margin-top:16px}
+.btn{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:9px;padding:10px 16px;font:600 15px var(--body);cursor:pointer}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--surface)}
+.btn:disabled{opacity:.4;cursor:default}
+.summary{position:sticky;top:12px;display:flex;flex-direction:column;gap:12px}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tile{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.tile .k{font-size:12px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.tile .v{font:800 22px var(--display);font-variant-numeric:tabular-nums}
+.kit{border-radius:10px;padding:12px;background:var(--accent-soft);border:1px solid var(--line)}
+.kit .name{font:800 17px var(--display)}
+.kit .next{font-size:13px;color:var(--muted);margin-top:4px}
+.meter{height:8px;border-radius:99px;background:var(--line);overflow:hidden;margin-top:8px}
+.meter i{display:block;height:100%;background:var(--accent)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+.code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px}
+.scroll{overflow-x:auto}
+.lines li{display:flex;justify-content:space-between;gap:8px;font-size:14px;padding:4px 0;border-bottom:1px dashed var(--line)}
+.lines{list-style:none;margin:0;padding:0}
+.empty{color:var(--muted);font-size:14px}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+.toast{font-size:14px;color:var(--good);font-weight:600;min-height:20px}
+textarea{width:100%;min-height:120px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:8px}
+.section-title{font:800 18px var(--display);margin:0 0 10px}
+.note{font-size:13px;color:var(--muted);margin-top:8px}
+
+h1,h2,h3,.section-title,.kit .name{text-transform:uppercase;letter-spacing:.01em}
+.bar{background:var(--accent);color:#fff;font:700 18px var(--display);text-transform:uppercase;text-align:center;padding:8px 12px;letter-spacing:.03em}
+.card{border-radius:0;border:none;background:var(--tile)}
+.salon.card{background:var(--surface);border:1px solid var(--line)}
+.summary .card{background:var(--surface);border:1px solid var(--line)}
+.tile{background:var(--tile);border:none;border-radius:0}
+.kit{background:var(--tile);border:none;border-radius:0}
+.chips{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}
+.chip{flex-direction:column;align-items:stretch;border-radius:0;border:2px solid transparent;background:var(--surface);padding:8px;text-align:left;font:700 12px var(--display);text-transform:uppercase;gap:6px;position:relative}
+.chip .swatch{display:block;width:100%;height:40px}
+.chip .dot{position:absolute;top:8px;right:8px}
+.chip.cur{border-color:var(--ink);background:var(--surface)}
+.chip.sel .dot{background:var(--accent)}
+.stepwrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(180px,40%);gap:16px;align-items:start;background:var(--surface);padding:16px}
+@media (max-width:600px){.stepwrap{grid-template-columns:1fr}}
+.stepimg{width:100%;max-height:220px;object-fit:contain}
+.step-head h2{font-size:28px;font-weight:800}
+.price{font:800 26px var(--display);color:var(--accent)}
+.qty{border-radius:0;background:var(--surface);border:2px solid var(--line)}
+.qty[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
+.btn{border-radius:0;text-transform:uppercase;letter-spacing:.03em;font-size:14px}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.primary:hover{background:#174a53}
+.tile .v{color:var(--ink)}
+#s-buy,#s-free{color:var(--accent)}
+.meter i{background:var(--accent)}
+.banner{border-radius:0;background:var(--tile);border:none}
+.mod{background:var(--surface);border-top:1px solid var(--line);padding:12px 16px;margin-top:0}
+.nav{margin-top:12px}
+header.top{border-bottom:1px solid var(--line);padding-bottom:12px}
+header.top h1{font-size:30px}
+.eyebrow{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+
+@media (prefers-reduced-motion: no-preference){.meter i{transition:width .25s ease}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div><a href="../index.html#projects" style="font-size:14px;color:var(--muted);text-decoration:none">&larr; Portfolio</a>
+      <div class="eyebrow">Professional salon color · Account opening · Fictional brand</div>
+      <h1>Salon Offer Builder</h1>
+      <p>Walk the salon through each sub-brand. The tool maps their picks to promo order codes (SPOs) for ERP entry.</p>
+    </div>
+  </header>
+
+  <div class="banner"><b>Portfolio demo.</b> Brand, product names, prices and order codes are all invented. The logic is the real prototype: tiered modules, a shared starter kit sized by total units, and a copy-paste order for the ERP.</div>
+
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" id="t-build" aria-selected="true" data-p="p-build">1. Build with salon</button>
+    <button class="tab" role="tab" id="t-sap" aria-selected="false" data-p="p-sap">2. Order for ERP</button>
+    <button class="tab" role="tab" id="t-map" aria-selected="false" data-p="p-map">Mapping chart (backend)</button>
+  </div>
+
+  <!-- BUILD -->
+  <section class="panel on" id="p-build" role="tabpanel">
+    <div class="card salon" style="margin-bottom:16px">
+      <label for="f-salon">Salon name<input id="f-salon" value="Example: Studio Nine Salon"></label>
+      <label for="f-acct">Account / prospect #<input id="f-acct" value="NEW-0001"></label>
+      <label for="f-rep">Sales rep<input id="f-rep" value="Alex"></label>
+      <label for="f-stylists">Color stylists<input id="f-stylists" type="number" min="1" value="6"></label>
+    </div>
+
+    <div class="bar">Build the color order</div>
+    <div class="grid" style="margin-top:12px">
+      <div class="card">
+        <div class="chips" id="chips"></div>
+        <div id="step"></div>
+        <div class="nav">
+          <button class="btn" id="back">Back</button>
+          <button class="btn primary" id="next">Next sub-brand</button>
+        </div>
+      </div>
+
+      <aside class="summary">
+        <div class="card">
+          <div class="section-title">This salon's order</div>
+          <div class="tiles">
+            <div class="tile"><div class="k">Color units</div><div class="v" id="s-units">0</div></div>
+            <div class="tile"><div class="k">Est. purchase</div><div class="v" id="s-buy">$0</div></div>
+            <div class="tile"><div class="k">SPOs to enter</div><div class="v" id="s-spos">0</div></div>
+            <div class="tile"><div class="k">Free-goods target</div><div class="v" id="s-free">$0</div></div>
+          </div>
+          <div class="kit" style="margin-top:12px" id="s-kit"></div>
+          <ul class="lines" id="s-lines" style="margin-top:12px"></ul>
+          <div class="nav" style="margin-top:12px"><button class="btn primary" id="go-sap" style="width:100%">Review order for ERP</button></div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- SAP -->
+  <section class="panel" id="p-sap" role="tabpanel">
+    <div class="card">
+      <div class="row">
+        <div>
+          <div class="section-title" id="sap-title">Order for ERP entry</div>
+          <div class="note" id="sap-meta"></div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+          <span class="toast" id="toast"></span>
+          <button class="btn primary" id="copy">Copy SPO lines</button>
+        </div>
+      </div>
+      <div class="scroll" style="margin-top:12px">
+        <table>
+          <thead><tr><th>Line</th><th>SPO #</th><th>Description</th><th class="num">SPO qty</th><th class="num">Color units</th><th class="num">Est. value</th></tr></thead>
+          <tbody id="sap-body"></tbody>
+          <tfoot id="sap-foot"></tfoot>
+        </table>
+      </div>
+      <p class="note">Shade choices are entered against each SPO at order entry, same as today. Version one is copy and paste for customer service. A direct ERP connection comes later.</p>
+      <h3 class="section-title" style="margin-top:18px">Everything the salon receives free</h3>
+      <div class="scroll"><table><thead><tr><th>Item</th><th class="num">Qty</th><th>Comes from</th></tr></thead><tbody id="free-body"></tbody></table></div>
+      <label for="tsv" style="margin-top:16px">Plain text (tab separated) for pasting
+        <textarea id="tsv" readonly></textarea>
+      </label>
+    </div>
+  </section>
+
+  <!-- MAP -->
+  <section class="panel" id="p-map" role="tabpanel">
+    <div class="card">
+      <div class="section-title">Backend mapping chart</div>
+      <p class="note" style="margin-top:0">Each sub-brand tier is one color-module SPO. Shared tools and backbar come from one starter kit, sized by total color units across all sub-brands, so stacking brands never duplicates capes, cards and smocks.</p>
+      <div class="scroll"><table><thead><tr><th>SPO #</th><th>Sub-brand</th><th class="num">Units</th><th class="num">Est. value</th><th>Module free goods</th></tr></thead><tbody id="map-body"></tbody></table></div>
+      <h3 class="section-title" style="margin-top:20px">Starter kit tiers</h3>
+      <div class="scroll"><table><thead><tr><th>SPO #</th><th>Kit</th><th>Color units</th><th class="num">Free-goods target</th><th>Contents</th></tr></thead><tbody id="kit-body"></tbody></table></div>
+    </div>
+  </section>
+</div>
+
+<script>
+// ---------- Backend chart (sample data) ----------
+const ceil = Math.ceil;
+const BRANDS = [
+  {id:"TCC", sw:"#6b2d2d", name:"Permanent Cans", fam:"Permanent", unit:"can (245 mL)", inc:[24,36,48,60,72,96], price:38.50, counts:true,
+   desc:"Permanent color in the 245 mL canister. Best for high-volume back bars using depot pumps.",
+   free:u=>[["Developer Lotion 6% | 20 Vol 1L",ceil(u/24)],["Developer Lotion 3%, 9%, 12% 1L (each)",ceil(u/48)],["Depot Pump 3% / 6% / 9% / 12% (set)",1],["Lightener Powder 1000g",u>=48?ceil(u/48):0]]},
+  {id:"TCT", sw:"#8a3b2f", name:"Permanent Tubes", fam:"Permanent", unit:"tube (60 mL)", inc:[24,36,48,60,72,96], price:11.00, counts:true, perCase:24,
+   desc:"Permanent color in 60 mL tubes. Sold by the case of 24.",
+   free:u=>[["Developer Lotion 6% | 20 Vol 1L",ceil(u/24)],["Developer Lotion 3%, 9%, 12% 1L (each)",ceil(u/48)],["Lightener Powder 1000g",u>=48?ceil(u/48):0]]},
+  {id:"TCZ", sw:"#b06a3b", name:"Zero Ammonia", fam:"Permanent", unit:"can or tube", inc:[12,24,36], price:29.86, counts:true,
+   desc:"Ammonia-free permanent color. Units can be split between cans and tubes at shade selection.",
+   free:u=>[["Developer Lotion 3% / 6% / 9% / 12% 1L (set)",u>=36?2:1],["Zero Ammonia Color Card",1],["Zero Ammonia Shade Indicator Tab Set",1],["Zero Ammonia Activation Guide",1]]},
+  {id:"COC", sw:"#7a4a68", name:"Demi Cans", fam:"Demi", unit:"can (120 mL)", inc:[24,36,48,60,72,96], price:24.00, counts:true,
+   desc:"Demi-permanent color in the 120 mL canister.",
+   free:u=>[["Developer Lotion 2% | 7 Vol 1L",ceil(u/24)],["Developer Lotion 3% | 10 Vol 1L",ceil(u/48)],["Demi Can Applicator Bottle",Math.min(6,ceil(u/24)+1)],["Depot Pump 2% and 3% (set)",1]]},
+  {id:"COT", sw:"#9a6a86", name:"Demi Tubes", fam:"Demi", unit:"tube (60 mL)", inc:[24,36,48,60,72,96], price:13.00, counts:true, perCase:24,
+   desc:"Demi-permanent color in 60 mL tubes. Sold by the case of 24.",
+   free:u=>[["Developer Lotion 2% | 7 Vol 1L",ceil(u/24)],["Developer Lotion 3% | 10 Vol 1L",ceil(u/48)],["Demi Tube Applicator Bottle",Math.min(6,ceil(u/24)+1)]]},
+  {id:"CGT", sw:"#c9a27a", name:"Gloss Toners", fam:"Demi", unit:"tube (60 mL)", inc:[18,36,54,72], price:13.00, counts:true, pending:true,
+   desc:"10-minute gloss and toning service. Mixed 1:1 with 2% developer.",
+   free:u=>[["Developer Lotion 2% | 7 Vol 1L",ceil(u/18)],["Demi Tube Applicator Bottle",ceil(u/18)]]},
+  {id:"LDK", sw:"#e8dcc0", name:"Lightener Intro Kit", fam:"Lighteners", unit:"intro kit", inc:[1,2,3], price:180.00, counts:false, kitPrice:true,
+   desc:"Lightener intro kit: lightening powder, strong and zero-ammonia lighteners, cream developers 3/6/9%.",
+   free:u=>[["Natural Lifting Cream 60mL",u],["Silver Lifting Cream 60mL",u],["Bond Serum 75mL",u]]},
+  {id:"ELU", sw:"#2f5d8a", name:"Direct Dye", fam:"Direct Dye", unit:"bottle (200 mL)", inc:[18,36], price:28.00, counts:true,
+   desc:"Ammonia-free direct dye. Purchase includes care shampoo and conditioner 1L.",
+   free:u=>{const m=u/18;return[["Direct Dye Shampoo 250mL",2*m],["Direct Dye Conditioner 200mL",2*m],["Direct Dye Thickener 100mL",m],["Direct Dye Lock 250mL",m],["Direct Dye Prepare 150mL",m],["Direct Dye Clean 250mL",m],["Direct Dye Return 250mL",m],["Direct Dye Swatch Fan",1]]}},
+  {id:"MRS", sw:"#555555", name:"Men's Grey Blend", fam:"Men", unit:"shade kit", inc:[1,2,3], price:95.00, counts:false, kitPrice:true,
+   desc:"Grey blending for men. Each kit: 4CA, 5CA, 6CA, 7CA (4x20mL each).",
+   free:u=>[["Grey Blend Developer 250mL + Applicator",u*2]]},
+  {id:"PPG", sw:"#3f7a5a", name:"Pigment Set", fam:"Pigments", unit:"pigment set", inc:[1,2,3], price:110.00, counts:false, kitPrice:true,
+   desc:"Set of 8 pure pigment 50mL shades for custom mixing and correction.",
+   free:u=>[]}
+];
+
+const KITS = [
+  {id:"KIT-1", name:"Essentials kit", min:1,  max:47,  pct:.33,
+   items:[["Pro Color Card",1],["Pro Coloring Bowl",1],["Pro Color Brush Medium (40mm)",1],["Color Care Shampoo 1L",1],["Color Care Conditioner 1L",1]]},
+  {id:"KIT-2", name:"Standard kit", min:48, max:95,  pct:.40,
+   items:[["Pro Color Card",1],["Pro Color Brush Medium (40mm)",3],["Pro Coloring Bowl",3],["Pro Color Dosage System",3],["Pro Cleansing Bottle",1],["Pro Depot Cleansing Pump",1],["Pro Colorist Smock",2],["Pro Coloring Cape",3],["Pro Cutting Cape",3],["Equalizer Spray 150mL",1],["Color Care Shampoo 1L",1],["Color Care Conditioner 1L",1]]},
+  {id:"KIT-3", name:"Growth kit",   min:96, max:155, pct:.44,
+   items:[["Pro Color Card",1],["Pro Color Tableau",1],["Pro Color Rack",6],["Pro Color Brush Medium (40mm)",4],["Pro Coloring Bowl",4],["Pro Color Dosage System",3],["Pro Cleansing Bottle",2],["Pro Depot Cleansing Pump",2],["Pro Colorist Smock",3],["Pro Coloring Cape",4],["Pro Cutting Cape",4],["Equalizer Spray 150mL",2],["Color Care Shampoo 1L",2],["Color Care Conditioner 1L",2]]},
+  {id:"KIT-4", name:"Market Leader kit", min:156, max:Infinity, pct:.47,
+   items:[["Pro Color Card",1],["Pro Color Tableau",1],["Pro Color Rack",14],["Pro Color Brush Medium (40mm)",2],["Pro Coloring Bowl",2],["Pro Color Dosage System",2],["Pro Color Measuring Bowl",2],["Pro Cleansing Bottle",2],["Pro Depot Cleansing Pump",2],["Pro Colorist Smock",3],["Pro Coloring Cape",2],["Pro Cutting Cape",2],["Equalizer Spray 150mL",3],["Color Remover for Skin 150mL",3],["Color Care Shampoo 1L",3],["Color Care Conditioner 1L",3]]}
+];
+
+const spoCode = (b,q)=>`ZSPO-${b.id}-${String(q).padStart(3,"0")}`;
+const money = n=>"$"+n.toLocaleString("en-US",{minimumFractionDigits:0,maximumFractionDigits:0});
+const money2 = n=>"$"+n.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});
+
+// ---------- State (opens with a realistic example) ----------
+const picks = {TCT:48, COT:24, CGT:18, LDK:1};
+let cur = 0;
+
+function calc(){
+  const lines=[]; let units=0, buy=0;
+  BRANDS.forEach(b=>{const q=picks[b.id]; if(!q) return;
+    const val=q*b.price; buy+=val; if(b.counts) units+=q;
+    lines.push({b,q,code:spoCode(b,q),val,free:b.free(q).filter(f=>f[1]>0)});
+  });
+  const kit = units>0 ? KITS.find(k=>units>=k.min && units<=k.max) : null;
+  return {lines,units,buy,kit};
+}
+
+function caseNote(b,q){
+  if(!q) return "Not adding this line.";
+  if(b.perCase) return `${q} ${b.unit}s = ${q/b.perCase} case${q/b.perCase===1?"":"s"} of ${b.perCase}. Est. ${money2(q*b.price)}.`;
+  return `${q} × ${b.unit}. Est. ${money2(q*b.price)}${b.kitPrice?" (placeholder kit price)":""}.`;
+}
+
+function renderChips(){
+  document.getElementById("chips").innerHTML = BRANDS.map((b,i)=>
+    `<button class="chip ${picks[b.id]?"sel":""} ${i===cur?"cur":""}" data-i="${i}" aria-current="${i===cur}"><span class="dot"></span><span class="swatch" style="background:${b.sw}"></span>${b.name}${picks[b.id]?" · "+picks[b.id]:""}</button>`).join("");
+  document.querySelectorAll(".chip").forEach(c=>c.onclick=()=>{cur=+c.dataset.i;render();});
+}
+
+function renderStep(){
+  const b=BRANDS[cur], q=picks[b.id]||0;
+  const free=q?b.free(q).filter(f=>f[1]>0):[];
+  document.getElementById("step").innerHTML = `
+    <div class="stepwrap"><div>
+    <div class="stepno">Sub-brand ${cur+1} of ${BRANDS.length}</div>
+    <h2>${b.name}${b.pending?'<span class="flag">Offer details pending</span>':""}</h2>
+    <div class="price">${q?money2(q*b.price):"$0.00"}</div>
+    <p class="desc">${b.desc}</p>
+    <div class="qtyrow" role="group" aria-label="How many ${b.unit}s">
+      <button class="qty none" data-q="0" aria-pressed="${q===0}">None</button>
+      ${b.inc.map(n=>`<button class="qty" data-q="${n}" aria-pressed="${q===n}">${n}</button>`).join("")}
+    </div>
+    <div class="hint">${caseNote(b,q)}</div>
+    </div><div class="stepimg" style="background:linear-gradient(135deg,${b.sw},#fff);min-height:160px" aria-hidden="true"></div></div>
+    <div class="mod">
+      <div><h3>Maps to SPO</h3><div class="code" style="font-size:15px">${q?spoCode(b,q):"None"}</div>
+        <div class="note">${q?`One color module. ${b.counts?`Counts ${q} units toward the starter kit tier.`:"Kit lines don't count toward the starter kit tier."}`:"Pick a quantity to see the SPO."}</div></div>
+      <div><h3>Free with this module</h3>${free.length?`<ul>${free.map(f=>`<li><span class="n">${f[1]}</span>${f[0]}</li>`).join("")}</ul>`:`<div class="empty">${q?"No module-specific free goods. Shared tools come from the starter kit.":"Nothing yet."}</div>`}</div>
+    </div>`;
+  document.querySelectorAll(".qty").forEach(btn=>btn.onclick=()=>{
+    const v=+btn.dataset.q; if(v) picks[b.id]=v; else delete picks[b.id]; render();});
+  document.getElementById("back").disabled = cur===0;
+  const nx=document.getElementById("next");
+  nx.textContent = cur===BRANDS.length-1 ? "Review order for ERP" : `Next: ${BRANDS[cur+1].name}`;
+}
+
+function renderSummary(){
+  const {lines,units,buy,kit}=calc();
+  document.getElementById("s-units").textContent=units;
+  document.getElementById("s-buy").textContent=money(buy);
+  document.getElementById("s-spos").textContent=lines.length+(kit?1:0);
+  document.getElementById("s-free").textContent=kit?money(buy*kit.pct):"$0";
+  const kb=document.getElementById("s-kit");
+  if(!kit){kb.innerHTML=`<div class="name">No starter kit yet</div><div class="next">Add at least one color line to qualify.</div>`;}
+  else{
+    const i=KITS.indexOf(kit), nxt=KITS[i+1];
+    const span = nxt ? (units-kit.min)/(nxt.min-kit.min) : 1;
+    kb.innerHTML=`<div class="name">${kit.name} <span class="code" style="font-weight:400">${kit.id}</span></div>
+      <div class="next">${nxt?`${nxt.min-units} more color units unlocks the ${nxt.name} (${Math.round(nxt.pct*100)}% free-goods target).`:"Top tier reached."}</div>
+      <div class="meter"><i style="width:${Math.max(4,Math.min(100,span*100))}%"></i></div>`;
+  }
+  document.getElementById("s-lines").innerHTML = lines.length ? lines.map(l=>`<li><span>${l.b.name} · ${l.q}</span><span class="code">${l.code}</span></li>`).join("") : `<li class="empty">No lines yet.</li>`;
+}
+
+function renderSap(){
+  const {lines,units,buy,kit}=calc();
+  const salon=document.getElementById("f-salon").value, acct=document.getElementById("f-acct").value, rep=document.getElementById("f-rep").value;
+  document.getElementById("sap-title").textContent=`Order for ERP entry: ${salon}`;
+  document.getElementById("sap-meta").textContent=`Account ${acct} · Rep ${rep} · ${new Date().toLocaleDateString("en-US")}`;
+  const rows=lines.map(l=>({code:l.code,desc:`${l.b.name} color module, ${l.q} ${l.b.unit}${l.q>1?"s":""}`,units:l.b.counts?l.q:"",val:l.val}));
+  if(kit) rows.push({code:kit.id,desc:`${kit.name} (tools and backbar, sized at ${units} color units)`,units:"",val:0});
+  document.getElementById("sap-body").innerHTML = rows.length ? rows.map((r,i)=>`<tr><td>${(i+1)*10}</td><td class="code">${r.code}</td><td>${r.desc}</td><td class="num">1</td><td class="num">${r.units}</td><td class="num">${r.val?money2(r.val):"Free"}</td></tr>`).join("")
+    : `<tr><td colspan="6" class="empty">No lines yet. Go back and pick quantities.</td></tr>`;
+  document.getElementById("sap-foot").innerHTML = rows.length ? `<tr><th colspan="4">Total</th><th class="num">${units}</th><th class="num">${money2(buy)}</th></tr>` : "";
+  // free goods roll-up
+  const map=new Map();
+  lines.forEach(l=>l.free.forEach(([n,q])=>{const k=map.get(n)||{q:0,src:new Set()};k.q+=q;k.src.add(l.b.name);map.set(n,k);}));
+  if(kit) kit.items.forEach(([n,q])=>{const k=map.get(n)||{q:0,src:new Set()};k.q+=q;k.src.add(kit.name);map.set(n,k);});
+  document.getElementById("free-body").innerHTML = map.size ? [...map].map(([n,v])=>`<tr><td>${n}</td><td class="num">${v.q}</td><td>${[...v.src].join(", ")}</td></tr>`).join("") : `<tr><td colspan="3" class="empty">Nothing yet.</td></tr>`;
+  document.getElementById("tsv").value = ["Line\tSPO\tQty\tDescription",...rows.map((r,i)=>`${(i+1)*10}\t${r.code}\t1\t${r.desc}`)].join("\n");
+}
+
+function renderMap(){
+  document.getElementById("map-body").innerHTML = BRANDS.flatMap(b=>b.inc.map(q=>`<tr><td class="code">${spoCode(b,q)}</td><td>${b.name}${b.pending?'<span class="flag">pending</span>':""}</td><td class="num">${q}</td><td class="num">${money2(q*b.price)}</td><td>${b.free(q).filter(f=>f[1]>0).map(f=>`${f[1]} ${f[0]}`).join("; ")||"None (kit only)"}</td></tr>`)).join("");
+  document.getElementById("kit-body").innerHTML = KITS.map(k=>`<tr><td class="code">${k.id}</td><td>${k.name}</td><td>${k.max===Infinity?k.min+"+":k.min+" to "+k.max}</td><td class="num">${Math.round(k.pct*100)}%</td><td>${k.items.map(i=>`${i[1]} ${i[0]}`).join("; ")}</td></tr>`).join("");
+}
+
+function render(){renderChips();renderStep();renderSummary();}
+
+function showTab(id){
+  document.querySelectorAll(".tab").forEach(t=>t.setAttribute("aria-selected",t.dataset.p===id));
+  document.querySelectorAll(".panel").forEach(p=>p.classList.toggle("on",p.id===id));
+  if(id==="p-sap") renderSap();
+  window.scrollTo(0,0);
+}
+document.querySelectorAll(".tab").forEach(t=>t.onclick=()=>showTab(t.dataset.p));
+document.getElementById("back").onclick=()=>{if(cur>0){cur--;render();}};
+document.getElementById("next").onclick=()=>{if(cur<BRANDS.length-1){cur++;render();}else showTab("p-sap");};
+document.getElementById("go-sap").onclick=()=>showTab("p-sap");
+document.getElementById("copy").onclick=async()=>{
+  const ta=document.getElementById("tsv"), t=document.getElementById("toast");
+  try{await navigator.clipboard.writeText(ta.value);t.textContent="Copied.";}
+  catch(e){ta.focus();ta.select();t.textContent="Text selected. Press Ctrl/Cmd+C.";}
+};
+renderMap();render();
+</script>
+</body>
+</html>

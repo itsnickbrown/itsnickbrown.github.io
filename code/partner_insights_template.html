@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Long-Tail Partner Insights | Demo data</title>
+<script src="../assets/chart.umd.min.js"></script>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:14px;background:#f8fafc;color:#1e293b}
+  .header{background:#fff;border-bottom:1px solid #e2e8f0;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;position:sticky;top:0;z-index:20}
+  .header h1{font-size:16px;font-weight:600}
+  .header h1 span{color:#0d9488}
+  .meta{font-size:12px;color:#64748b}
+  .controls{display:flex;align-items:center;gap:10px;font-size:12px;color:#64748b}
+  select,input[type=search]{font:inherit;font-size:13px;padding:6px 10px;border:1px solid #cbd5e1;border-radius:8px;background:#fff;color:#1e293b}
+  .banner{margin:16px 24px 0;background:#fef3c7;border-left:4px solid #d97706;color:#7c2d12;padding:10px 14px;font-size:12px;border-radius:6px}
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;padding:16px 24px}
+  .kpi{background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:14px 16px;position:relative}
+  .kpi.click{cursor:pointer}.kpi.click:hover{border-color:#94a3b8}
+  .kpi-label{font-size:11px;color:#64748b;margin-bottom:4px;display:flex;align-items:center;gap:6px}
+  .kpi-val{font-size:24px;font-weight:600;color:#1e293b}
+  .kpi-sub{font-size:11px;color:#94a3b8;margin-top:3px;line-height:1.45}
+  .up{color:#15803d;font-weight:600}.down{color:#b91c1c;font-weight:600}.flat{color:#64748b;font-weight:600}
+  .dot{width:8px;height:8px;border-radius:2px;display:inline-block}
+  .charts{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:0 24px 16px}
+  .card{background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:16px;min-width:0}
+  .card.full{grid-column:1/-1}
+  .chart-title{font-size:13px;font-weight:600;margin-bottom:4px;color:#374151}
+  .chart-sub{font-size:11px;color:#94a3b8;margin-bottom:12px}
+  .glance{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .glance h3{font-size:12px;font-weight:600;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+  .glance h3 small{font-weight:400;color:#94a3b8}
+  .glance ol{list-style:none}
+  .glance li{display:flex;justify-content:space-between;gap:8px;font-size:12px;padding:5px 0;border-bottom:1px solid #f1f5f9}
+  .glance li a{color:#1e293b;text-decoration:none;cursor:pointer;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .glance li a:hover{text-decoration:underline}
+  .glance li span{color:#64748b;white-space:nowrap}
+  .empty{font-size:12px;color:#94a3b8;padding:6px 0}
+  .tabs{display:flex;gap:4px;border-bottom:1px solid #e2e8f0;margin-bottom:12px}
+  .tab{font:inherit;font-size:13px;padding:8px 14px;border:none;background:none;color:#64748b;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px}
+  .tab.on{color:#1e293b;font-weight:600;border-bottom-color:#0d9488}
+  .toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
+  .chip{font:inherit;font-size:12px;padding:5px 10px;border:1px solid #e2e8f0;border-radius:999px;background:#fff;color:#475569;cursor:pointer}
+  .chip.on{background:#1e293b;border-color:#1e293b;color:#fff}
+  .chip b{font-weight:600;margin-left:3px}
+  .btn{font:inherit;font-size:12px;padding:5px 12px;border:1px solid #cbd5e1;border-radius:8px;background:#fff;cursor:pointer;margin-left:auto}
+  .tablewrap{overflow-x:auto}
+  table{width:100%;border-collapse:collapse;font-size:12px}
+  th{padding:7px 10px;text-align:left;font-size:11px;font-weight:500;color:#64748b;border-bottom:1px solid #e2e8f0;background:#f8fafc;white-space:nowrap;cursor:pointer;user-select:none}
+  th.nosort{cursor:default}
+  th.sorted::after{content:" \25BE"}th.sorted.asc::after{content:" \25B4"}
+  td{padding:7px 10px;border-bottom:1px solid #f1f5f9;white-space:nowrap}
+  td.wrap{white-space:normal;min-width:160px}
+  tr.row{cursor:pointer}tr.row:hover td{background:#f8fafc}
+  tr.row.open td{background:#f1f5f9}
+  .num{text-align:right;font-variant-numeric:tabular-nums}
+  .tag{display:inline-block;font-size:10px;font-weight:600;padding:2px 7px;border-radius:999px;margin-right:3px}
+  .t-new{background:#ecfccb;color:#3f6212}.t-returning{background:#fef3c7;color:#92400e}.t-repeat{background:#dbeafe;color:#1e40af}
+  .t-growing{background:#dcfce7;color:#166534}.t-declining{background:#fee2e2;color:#991b1b}.t-flat{background:#f1f5f9;color:#475569}
+  .t-quiet{background:#ede9fe;color:#5b21b6}.t-inactive{background:#f1f5f9;color:#94a3b8}
+  .detail td{background:#fcfcfd;padding:14px 16px;white-space:normal}
+  .dgrid{display:grid;grid-template-columns:1.1fr 1fr;gap:18px}
+  .dgrid .wide{grid-column:1/-1}
+  .dgrid h4{font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;text-transform:uppercase;letter-spacing:.03em}
+  .dgrid table{font-size:11px}.dgrid td,.dgrid th{padding:4px 8px;cursor:default}
+  .dgrid tr.after td{background:#ecfccb}
+  .dmeta{font-size:12px;color:#475569;margin-bottom:10px}
+  .more{text-align:center;padding:10px}
+  #tables{scroll-margin-top:80px}
+  .notes{margin:0 24px 32px;font-size:11px;color:#64748b;line-height:1.7}
+  .notes b{color:#475569}
+  @media(max-width:900px){.charts,.glance,.dgrid{grid-template-columns:1fr}.header{position:static}}
+</style>
+</head>
+<body>
+<div class="header">
+  <div>
+    <h1><a href="../index.html#projects" style="color:#64748b;text-decoration:none;font-weight:400">&larr; Portfolio</a> &nbsp; Long-Tail <span>Partner Insights</span></h1>
+    <div class="meta" id="meta"></div>
+  </div>
+  <div class="controls">
+    <label for="month">Month</label>
+    <button class="chip" id="qCur"></button><button class="chip" id="qLast"></button>
+    <select id="month" autocomplete="off"></select>
+  </div>
+</div>
+<div class="banner" style="background:#ecfeff;border-color:#0d9488;color:#134e4a"><b>Demo with synthetic data.</b> Same code as the production page. Every name and number is fake. Try the month picker, the KPI cards, the filter chips and click any partner row.</div>
+<div id="banner"></div>
+<div class="kpis" id="kpis"></div>
+
+<div class="charts">
+  <div class="card">
+    <div class="chart-title">Partners MTD by month</div>
+    <div class="chart-sub">Distinct partners accumulated through the month. Are we adding faster than last month?</div>
+    <canvas id="cMtd"></canvas>
+  </div>
+  <div class="card">
+    <div class="chart-title">Partners per month: repeat, returning, brand new</div>
+    <div class="chart-sub" id="subMix"></div>
+    <canvas id="cMix"></canvas>
+  </div>
+  <div class="card">
+    <div class="chart-title">Revenue per month vs same month last year</div>
+    <div class="chart-sub">Bars are each month. The line is the same month one year earlier.</div>
+    <canvas id="cRev"></canvas>
+  </div>
+  <div class="card">
+    <div class="chart-title">Year over year: partners buying by calendar month</div>
+    <div class="chart-sub">Same month, three years side by side</div>
+    <canvas id="cYoy"></canvas>
+  </div>
+  <div class="card">
+    <div class="chart-title">Active partners per quarter</div>
+    <div class="chart-sub">Distinct partners with POS in the quarter. Grey means the quarter is not finished.</div>
+    <canvas id="cQtr"></canvas>
+  </div>
+  <div class="card">
+    <div class="chart-title">Where the revenue came from</div>
+    <div class="chart-sub">Monthly revenue split by partner type</div>
+    <canvas id="cRevMix"></canvas>
+  </div>
+  <div class="card full">
+    <div class="chart-title" id="glanceTitle">At a glance</div>
+    <div class="chart-sub">Click a name to open it in the partner table</div>
+    <div class="glance" id="glance"></div>
+  </div>
+</div>
+
+<div class="card" style="margin:0 24px 20px" id="tables">
+  <div class="tabs">
+    <button class="tab on" data-tab="partners">Partners</button>
+    <button class="tab" data-tab="endusers">End users</button>
+    <button class="tab" data-tab="orders">Orders this month</button>
+  </div>
+  <div id="tabBody"></div>
+</div>
+
+<div class="notes" id="notes"></div>
+
+<script>
+const D = /*__DATA__*/null;
+const M = D.months, NM = M.length;
+const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const C = {repeat:'#3b82f6', returning:'#f59e0b', brandnew:'#84cc16', grey:'#cbd5e1', dark:'#1e293b'};
+const COLORS = ["#3b82f6","#f97316","#10b981","#8b5cf6","#ef4444","#eab308","#06b6d4","#ec4899"];
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const lab = i => { const [y,m] = M[i].split('-'); return MON[+m-1] + ' ' + y; };
+const labShort = i => { const [y,m] = M[i].split('-'); return MON[+m-1] + " '" + y.slice(2); };
+const money = v => (v < 0 ? '-' : '') + '$' + Math.abs(Math.round(v)).toLocaleString();
+const moneyK = v => { const a = Math.abs(v); const s = v < 0 ? '-' : ''; return a >= 1e6 ? s+'$'+(a/1e6).toFixed(2)+'M' : a >= 1e3 ? s+'$'+Math.round(a/1e3)+'K' : s+'$'+Math.round(a); };
+const pct = (a, b) => (b ? (a - b) / Math.abs(b) : null);
+function delta(a, b, isPct) {
+  if (b === null || b === undefined) return '<span class="flat">n/a</span>';
+  if (isPct) { const p = pct(a, b); if (p === null) return '<span class="flat">n/a</span>';
+    const cls = p > 0.005 ? 'up' : p < -0.005 ? 'down' : 'flat';
+    return `<span class="${cls}">${p > 0 ? '+' : ''}${(p*100).toFixed(0)}%</span>`; }
+  const d = a - b, cls = d > 0 ? 'up' : d < 0 ? 'down' : 'flat';
+  return `<span class="${cls}">${d > 0 ? '+' : ''}${d}</span>`;
+}
+const fmtDate = s => s ? s.slice(5,7) + '/' + s.slice(8,10) + '/' + s.slice(2,4) : '';
+
+// ---------- prep ----------
+function prep(list) {
+  list.forEach((p, n) => {
+    p.id = n;
+    p.rev = new Float64Array(NM); p.ord = new Uint16Array(NM); p.act = new Uint8Array(NM);
+    p.m.forEach(([i, r, o]) => { p.rev[i] = r; p.ord[i] = o; p.act[i] = 1; });
+    p.cum = new Uint16Array(NM + 1);
+    for (let i = 0; i < NM; i++) p.cum[i+1] = p.cum[i] + p.act[i];
+    p.last = p.m[p.m.length - 1][0];
+    p.nl = p.n.toLowerCase();
+  });
+}
+prep(D.partners); prep(D.endUsers);
+D.endUsers.forEach(e => { e.pl = e.p.map(i => D.partners[i].n); e.search = (e.n + ' ' + e.pl.join(' ')).toLowerCase(); });
+const cnt = (p, a, b) => { a = Math.max(a, 0); b = Math.min(b, NM - 1); return b < a ? 0 : p.cum[b+1] - p.cum[a]; };
+const sumArr = (arr, a, b) => { let s = 0; for (let i = Math.max(a,0); i <= Math.min(b, NM-1); i++) s += arr[i]; return s; };
+const lastActiveUpTo = (p, i) => { for (let j = i; j >= 0; j--) if (p.act[j]) return j; return -1; };
+function ptype(p, i) {
+  if (!p.act[i]) return null;
+  if (p.f === i) return 'new';
+  return cnt(p, i - 12, i - 1) > 0 ? 'repeat' : 'returning';
+}
+const isQuiet = (p, i) => cnt(p, i - 14, i - 3) >= 2 && cnt(p, i - 2, i) === 0;
+function trend(p, i) {
+  const t = sumArr(p.rev, i - 11, i), q = sumArr(p.rev, i - 23, i - 12);
+  if (!cnt(p, i - 23, i)) return 'inactive';
+  if (!cnt(p, i - 23, i - 12)) return 'new';
+  const c = pct(t, q);
+  return c === null ? (t > 0 ? 'growing' : 'flat') : c > 0.05 ? 'growing' : c < -0.05 ? 'declining' : 'flat';
+}
+
+// monthly summary, computed once
+const S = [];
+for (let i = 0; i < NM; i++) {
+  const s = {partners:0, repeat:0, returning:0, 'new':0, rev:0, rev_repeat:0, rev_returning:0, rev_new:0, t12:0, p12:0, quiet:0};
+  D.partners.forEach(p => {
+    const t = ptype(p, i);
+    if (t) { s.partners++; s[t]++; s.rev += p.rev[i]; s['rev_' + t] += p.rev[i]; }
+    if (cnt(p, i - 11, i)) s.t12++;
+    if (cnt(p, i - 23, i - 12)) s.p12++;
+    if (isQuiet(p, i)) s.quiet++;
+  });
+  S.push(s);
+}
+
+// ---------- state ----------
+let sel = D.anchor;   // demo opens on the last full month
+let tab = 'partners';
+const TS = {
+  partners: {filter:'month', q:'', sort:'mrev', dir:-1, limit:100, open:null},
+  endusers: {filter:'month', q:'', sort:'t12', dir:-1, limit:100},
+  orders:   {q:'', sort:'rev', dir:-1, limit:150},
+};
+
+// ---------- header, month picker ----------
+$('#meta').innerHTML = `POS through ${fmtDate(D.asOf)} &nbsp;|&nbsp; ${D.rows.toLocaleString()} ledger lines &nbsp;|&nbsp; ${D.partners.length.toLocaleString()} partners since 2020 &nbsp;|&nbsp; Generated ${esc(D.generated)}`;
+const picker = $('#month');
+for (let i = NM - 1; i >= Math.min(12, NM - 1); i--) {
+  const o = document.createElement('option');
+  o.value = i;
+  o.textContent = lab(i) + (i === D.openIdx ? ` (open, through ${fmtDate(D.asOf)})` : i === D.anchor ? ' (last full month)' : '');
+  picker.appendChild(o);
+}
+picker.value = sel;
+function goMonth(i) { sel = i; picker.value = i; TS.partners.open = null; renderAll(); }
+picker.addEventListener('change', () => goMonth(+picker.value));
+const qCur = $('#qCur'), qLast = $('#qLast');
+if (D.openIdx >= 0) { qCur.textContent = lab(D.openIdx).slice(0,3) + ' so far'; qCur.onclick = () => goMonth(D.openIdx); } else qCur.remove();
+qLast.textContent = lab(D.anchor).slice(0,3) + ' (last full month)'; qLast.onclick = () => goMonth(D.anchor);
+function syncQuick() { if (qCur.isConnected) qCur.classList.toggle('on', sel === D.openIdx); qLast.classList.toggle('on', sel === D.anchor); }
+
+// ---------- KPIs ----------
+function renderKPIs() {
+  const i = sel, s = S[i], pm = i > 0 ? S[i-1] : null, py = i >= 12 ? S[i-12] : null;
+  const open = i === D.openIdx;
+  const pace = open ? D.pace : null;
+  $('#banner').innerHTML = open
+    ? `<div class="banner">${lab(i)} is still open (POS through ${fmtDate(D.asOf)}). Month over month compares against the same days last month. Last year figures are the full month, because last year's POS has no daily dates, so those will read low until the month closes. Use the ${lab(D.anchor).slice(0,3)} button for the last full month.</div>`
+    : i !== D.anchor
+    ? `<div class="banner" style="background:#e0f2fe;border-color:#0284c7;color:#0c4a6e">You're looking at <b>${lab(i)}</b>. Tags, trailing 12, gone quiet and last seen are all as of that month, so anything bought after it won't show in those columns. <a href="#" id="bannerBack" style="color:#0c4a6e;font-weight:600">Back to ${lab(D.openIdx >= 0 ? D.openIdx : D.anchor)}</a></div>`
+    : '';
+  const bb = $('#bannerBack'); if (bb) bb.onclick = e => { e.preventDefault(); goMonth(D.openIdx >= 0 ? D.openIdx : D.anchor); };
+  const pmPartners = pace && pace.pm ? pace.pm.partners : (pm ? pm.partners : null);
+  const pmRev = pace && pace.pm ? pace.pm.rev : (pm ? pm.rev : null);
+  const pmLabel = pace && pace.pm ? `${lab(i-1).slice(0,3)} 1-${pace.day}` : (pm ? lab(i-1).slice(0,3) : '');
+  const lyTag = open ? ' (full month)' : '';
+  const share = (n) => s.partners ? Math.round(n / s.partners * 100) + '%' : '0%';
+  const cards = [
+    {label:'Partners who bought', val:s.partners,
+     sub:`vs ${pmPartners ?? 'n/a'} ${pmLabel} ${delta(s.partners, pmPartners)}<br>vs ${py ? py.partners : 'n/a'} ${py ? lab(i-12) + lyTag : ''} ${delta(s.partners, py ? py.partners : null, true)}`, filter:'month'},
+    {label:`<span class="dot" style="background:${C.repeat}"></span>Repeat partners`, val:s.repeat,
+     sub:`${share(s.repeat)} of buyers. Also bought in the prior 12 months<br>Last year${lyTag}: ${py ? py.repeat : 'n/a'} ${delta(s.repeat, py ? py.repeat : null, true)}`, filter:'repeat'},
+    {label:`<span class="dot" style="background:${C.brandnew}"></span>Brand new partners`, val:s['new'],
+     sub:`First POS ever<br>Last year${lyTag}: ${py ? py['new'] : 'n/a'} ${delta(s['new'], py ? py['new'] : null)}`, filter:'new'},
+    {label:`<span class="dot" style="background:${C.returning}"></span>Returning partners`, val:s.returning,
+     sub:`Back after 12+ months quiet<br>Last year${lyTag}: ${py ? py.returning : 'n/a'} ${delta(s.returning, py ? py.returning : null)}`, filter:'returning'},
+    {label:'Revenue', val:moneyK(s.rev),
+     sub:`vs ${pmRev !== null ? moneyK(pmRev) : 'n/a'} ${pmLabel} ${delta(s.rev, pmRev, true)}<br>vs ${py ? moneyK(py.rev) : 'n/a'} ${py ? lab(i-12) + lyTag : ''} ${delta(s.rev, py ? py.rev : null, true)}`},
+    {label:'Active base (trailing 12)', val:s.t12,
+     sub:`Partners with POS in the 12 months to ${lab(i).slice(0,3)}<br>vs ${s.p12} the 12 before ${delta(s.t12, s.p12, true)}`, filter:'t12'},
+    {label:'Gone quiet', val:s.quiet,
+     sub:`Bought in 2+ months of the prior year, nothing in the last 3<br>Worth a call`, filter:'quiet'},
+  ];
+  $('#kpis').innerHTML = cards.map((c, n) =>
+    `<div class="kpi${c.filter ? ' click' : ''}" data-f="${c.filter || ''}" title="${c.filter ? 'Show these partners in the table' : ''}">
+      <div class="kpi-label">${c.label}</div><div class="kpi-val">${c.val}</div><div class="kpi-sub">${c.sub}</div></div>`).join('');
+  document.querySelectorAll('.kpi.click').forEach(el => el.onclick = () => {
+    tab = 'partners'; Object.assign(TS.partners, {filter: el.dataset.f, q:'', limit:100, open:null});
+    renderTable(); document.getElementById('tables').scrollIntoView({behavior:'smooth'});
+  });
+}
+
+// ---------- charts ----------
+const charts = {};
+const HAS_CHART = typeof Chart !== 'undefined';
+if (HAS_CHART) { Chart.defaults.font.size = 11; Chart.defaults.color = '#64748b'; Chart.defaults.aspectRatio = 2.1; }
+else document.querySelectorAll('canvas').forEach(c => c.outerHTML = '<div class="empty">Charts need an internet connection to load Chart.js. Cards and tables still work.</div>');
+const grid = {color:'#f1f5f9'};
+function mk(id, cfg) { if (!HAS_CHART) return; if (charts[id]) charts[id].destroy(); charts[id] = new Chart(document.getElementById(id), cfg); }
+const win = () => { const a = Math.max(0, sel - 23); return Array.from({length: sel - a + 1}, (_, k) => a + k); };
+const faded = (hex, i) => i === D.openIdx ? hex + '66' : hex;
+
+function renderMtd() {
+  if (!HAS_CHART) return;
+  const months = Object.keys(D.mtd || {});
+  if (!months.length) return;
+  const days = Array.from({length:31}, (_, k) => k + 1);
+  mk('cMtd', {type:'line',
+    data:{labels: days.map(d => 'Day ' + d),
+      datasets: months.map((m, n) => {
+        const byDay = {}; D.mtd[m].forEach(x => byDay[x.day] = x.partners);
+        return {label:m, data: days.map(d => byDay[d] ?? null), borderColor:COLORS[n % COLORS.length],
+          backgroundColor:'transparent', borderWidth:2, tension:0.35, pointRadius:3, pointBackgroundColor:'#fff', spanGaps:false};
+      })},
+    options:{responsive:true, interaction:{mode:'nearest', intersect:false},
+      plugins:{legend:{labels:{boxWidth:12}}},
+      scales:{y:{beginAtZero:true, grid, title:{display:true, text:'Distinct partners'}}, x:{grid:{display:false}, ticks:{maxRotation:45, minRotation:45}}}}});
+}
+
+function renderMix() {
+  const w = win();
+  const full = w.filter(i => i !== D.openIdx).slice(-12);
+  const avg = full.length ? full.reduce((a, i) => a + S[i].partners, 0) / full.length : 0;
+  $('#subMix').textContent = `24 months to ${lab(sel)}. Dashed line is the 12-month average (${Math.round(avg)}).`;
+  mk('cMix', {type:'bar',
+    data:{labels: w.map(labShort), datasets:[
+      {label:'Repeat', data:w.map(i => S[i].repeat), backgroundColor:w.map(i => faded(C.repeat, i)), stack:'s', order:2},
+      {label:'Returning', data:w.map(i => S[i].returning), backgroundColor:w.map(i => faded(C.returning, i)), stack:'s', order:2},
+      {label:'Brand new', data:w.map(i => S[i]['new']), backgroundColor:w.map(i => faded(C.brandnew, i)), stack:'s', order:2},
+      {type:'line', label:`12-mo average (${Math.round(avg)})`, data:w.map(() => Math.round(avg)), borderColor:'#f97316', borderDash:[6,3], borderWidth:2, pointRadius:0, order:1},
+    ]},
+    options:{responsive:true, interaction:{mode:'index', intersect:false},
+      plugins:{legend:{labels:{boxWidth:12}}, tooltip:{callbacks:{footer: items => 'Total: ' + S[w[items[0].dataIndex]].partners}}},
+      scales:{x:{stacked:true, grid:{display:false}, ticks:{maxRotation:45, minRotation:45}}, y:{stacked:true, beginAtZero:true, grid}}}});
+}
+
+function renderRev() {
+  const w = win();
+  mk('cRev', {type:'bar',
+    data:{labels:w.map(labShort), datasets:[
+      {label:'Revenue', data:w.map(i => Math.round(S[i].rev)), backgroundColor:w.map(i => i === sel ? C.dark : faded('#3b82f6', i)), borderRadius:3, order:2},
+      {type:'line', label:'Same month last year', data:w.map(i => i >= 12 ? Math.round(S[i-12].rev) : null), borderColor:'#94a3b8', borderWidth:2, pointRadius:2, tension:0.3, order:1},
+    ]},
+    options:{responsive:true, interaction:{mode:'index', intersect:false},
+      plugins:{legend:{labels:{boxWidth:12}}, tooltip:{callbacks:{
+        label: c => c.dataset.label + ': ' + money(c.parsed.y),
+        footer: items => { const i = w[items[0].dataIndex]; if (i < 12) return ''; const p = pct(S[i].rev, S[i-12].rev); return p === null ? '' : 'YoY: ' + (p > 0 ? '+' : '') + (p*100).toFixed(0) + '%'; }}}},
+      scales:{x:{grid:{display:false}, ticks:{maxRotation:45, minRotation:45}}, y:{beginAtZero:true, grid, ticks:{callback:v => moneyK(v)}}}}});
+}
+
+function renderYoy() {
+  const Y = +M[sel].slice(0,4);
+  const years = [Y-2, Y-1, Y];
+  const cols = ['#cbd5e1', '#94a3b8', '#3b82f6'];
+  mk('cYoy', {type:'bar',
+    data:{labels:MON, datasets: years.map((y, n) => ({
+      label: String(y) + (y === +M[NM-1].slice(0,4) && D.openIdx >= 0 ? ' (open month faded)' : ''),
+      data: MON.map((_, k) => { const ym = y + '-' + String(k+1).padStart(2,'0'); const i = M.indexOf(ym); return i >= 0 ? S[i].partners : null; }),
+      backgroundColor: MON.map((_, k) => { const i = M.indexOf(y + '-' + String(k+1).padStart(2,'0')); return i === D.openIdx ? cols[n] + '66' : cols[n]; }),
+      borderRadius:3}))},
+    options:{responsive:true, interaction:{mode:'index', intersect:false},
+      plugins:{legend:{labels:{boxWidth:12}}},
+      scales:{x:{grid:{display:false}}, y:{beginAtZero:true, grid}}}});
+}
+
+function quarters() {
+  const out = [];
+  for (let i = 0; i < NM; i++) {
+    const [y, m] = M[i].split('-').map(Number);
+    const q = Math.floor((m - 1) / 3);
+    const key = `Q${q+1} '${String(y).slice(2)}`;
+    if (!out.length || out[out.length-1].key !== key) out.push({key, idx:[]});
+    out[out.length-1].idx.push(i);
+  }
+  out.forEach(q => {
+    const a = q.idx[0], b = q.idx[q.idx.length-1];
+    q.partners = D.partners.reduce((n, p) => n + (cnt(p, a, b) ? 1 : 0), 0);
+    q.partial = q.idx.length < 3 || q.idx.includes(D.openIdx);
+    q.rev = q.idx.reduce((t, i) => t + S[i].rev, 0);
+  });
+  return out;
+}
+const Q = quarters();
+function renderQtr() {
+  const end = Q.findIndex(q => q.idx.includes(sel));
+  const w = Q.slice(Math.max(0, end - 11), end + 1);
+  mk('cQtr', {type:'bar',
+    data:{labels:w.map(q => q.key), datasets:[{label:'Active partners', data:w.map(q => q.partners),
+      backgroundColor:w.map(q => q.partial ? C.grey : '#10b981'), borderRadius:3}]},
+    options:{responsive:true,
+      plugins:{legend:{display:false}, tooltip:{callbacks:{footer: items => {
+        const q = w[items[0].dataIndex], k = Q.indexOf(q), ly = Q[k-4];
+        const lines = ['Revenue: ' + money(q.rev)];
+        if (ly) { const p = pct(q.partners, ly.partners); lines.push(`Same quarter last year: ${ly.partners}` + (p !== null ? ` (${p > 0 ? '+' : ''}${(p*100).toFixed(0)}%)` : '')); }
+        if (q.partial) lines.push('Quarter not finished');
+        return lines; }}}},
+      scales:{x:{grid:{display:false}}, y:{beginAtZero:true, grid}}}});
+}
+
+function renderRevMix() {
+  const w = win();
+  mk('cRevMix', {type:'bar',
+    data:{labels:w.map(labShort), datasets:[
+      {label:'Repeat', data:w.map(i => Math.round(S[i].rev_repeat)), backgroundColor:w.map(i => faded(C.repeat, i)), stack:'s'},
+      {label:'Returning', data:w.map(i => Math.round(S[i].rev_returning)), backgroundColor:w.map(i => faded(C.returning, i)), stack:'s'},
+      {label:'Brand new', data:w.map(i => Math.round(S[i].rev_new)), backgroundColor:w.map(i => faded(C.brandnew, i)), stack:'s'},
+    ]},
+    options:{responsive:true, interaction:{mode:'index', intersect:false},
+      plugins:{legend:{labels:{boxWidth:12}}, tooltip:{callbacks:{label: c => c.dataset.label + ': ' + money(c.parsed.y),
+        footer: items => { const i = w[items[0].dataIndex]; const r = S[i].rev; return r ? `Repeat share: ${Math.round(S[i].rev_repeat / r * 100)}%` : ''; }}}},
+      scales:{x:{stacked:true, grid:{display:false}, ticks:{maxRotation:45, minRotation:45}}, y:{stacked:true, grid, ticks:{callback:v => moneyK(v)}}}}});
+}
+
+// ---------- at a glance ----------
+function renderGlance() {
+  const i = sel;
+  $('#glanceTitle').textContent = `At a glance: ${lab(i)}`;
+  const buyers = D.partners.filter(p => p.act[i]);
+  const newP = buyers.filter(p => ptype(p, i) === 'new').sort((a, b) => b.rev[i] - a.rev[i]);
+  const retP = buyers.filter(p => ptype(p, i) === 'returning').sort((a, b) => b.rev[i] - a.rev[i]);
+  const quiet = D.partners.filter(p => isQuiet(p, i)).sort((a, b) => sumArr(b.rev, i-14, i-3) - sumArr(a.rev, i-14, i-3));
+  const li = (p, right) => `<li><a data-p="${p.id}">${esc(p.n)}</a><span>${right}</span></li>`;
+  const block = (title, color, sub, list, fn) => `<div><h3><span class="dot" style="background:${color}"></span>${title} <small>${sub}</small></h3>
+    ${list.length ? '<ol>' + list.slice(0, 10).map(fn).join('') + '</ol>' + (list.length > 10 ? `<div class="empty">+${list.length - 10} more in the table</div>` : '') : '<div class="empty">None this month</div>'}</div>`;
+  $('#glance').innerHTML =
+    block('Brand new', C.brandnew, `${newP.length} partners, ${moneyK(newP.reduce((t, p) => t + p.rev[i], 0))}`, newP, p => li(p, money(p.rev[i]))) +
+    block('Came back', C.returning, `${retP.length} partners, ${moneyK(retP.reduce((t, p) => t + p.rev[i], 0))}`, retP,
+      p => { const j = lastActiveUpTo(p, i - 1); return li(p, `${i - j} mo quiet &middot; ${money(p.rev[i])}`); }) +
+    block('Gone quiet', '#8b5cf6', `${quiet.length} regular buyers`, quiet,
+      p => { const j = lastActiveUpTo(p, i); return li(p, `last ${labShort(j)} &middot; ${moneyK(sumArr(p.rev, i-14, i-3))} prior yr`); });
+  document.querySelectorAll('#glance a').forEach(a => a.onclick = () => openPartner(+a.dataset.p));
+}
+function openPartner(id) {
+  const p = D.partners[id];
+  tab = 'partners';
+  Object.assign(TS.partners, {filter:'all', q:p.n, limit:100, open:id});
+  renderTable();
+  document.getElementById('tables').scrollIntoView({behavior:'smooth'});
+}
+
+// ---------- tables ----------
+function spark(p, i) {
+  const a = Math.max(0, i - 23), n = i - a + 1, bw = 4, gap = 1, h = 22;
+  let mx = 0; for (let j = a; j <= i; j++) mx = Math.max(mx, Math.abs(p.rev[j]));
+  let s = `<svg width="${n*(bw+gap)}" height="${h}" style="vertical-align:middle">`;
+  for (let j = a; j <= i; j++) {
+    const x = (j - a) * (bw + gap);
+    if (!p.act[j]) { s += `<rect x="${x}" y="${h-1}" width="${bw}" height="1" fill="#e2e8f0"/>`; continue; }
+    const bh = Math.max(2, mx ? Math.abs(p.rev[j]) / mx * (h - 2) : 2);
+    const fill = p.rev[j] < 0 ? '#ef4444' : j === i ? '#1e293b' : '#3b82f6';
+    s += `<rect x="${x}" y="${h-bh}" width="${bw}" height="${bh}" fill="${fill}" rx="1"><title>${labShort(j)}: ${money(p.rev[j])}</title></rect>`;
+  }
+  return s + '</svg>';
+}
+const TYPE_LABEL = {'new':'Brand new', returning:'Returning', repeat:'Repeat'};
+const TREND_LABEL = {growing:'Growing', declining:'Declining', flat:'Flat', 'new':'New this year', inactive:'Inactive'};
+
+function partnerRows() {
+  const i = sel;
+  return D.partners.map(p => {
+    const lastIdx = lastActiveUpTo(p, i);
+    return {p, type: ptype(p, i), trend: trend(p, i), quiet: isQuiet(p, i),
+      t12: sumArr(p.rev, i-11, i), p12: sumArr(p.rev, i-23, i-12),
+      act12: cnt(p, i-11, i), ord12: sumArr(p.ord, i-11, i), mrev: p.rev[i],
+      yoy: pct(sumArr(p.rev, i-11, i), sumArr(p.rev, i-23, i-12)),
+      first: p.fd, lastIdx, last: lastIdx === p.last ? p.ld : (lastIdx >= 0 ? M[lastIdx] : ''),
+      name: p.n};
+  }).filter(r => r.lastIdx >= 0 && r.p.f <= i);
+}
+const PF = [
+  ['t12', 'Bought in last 12 mo', r => r.act12 > 0],
+  ['month', () => 'Bought in ' + lab(sel).slice(0,3), r => !!r.type],
+  ['repeat', 'Repeat', r => r.type === 'repeat'],
+  ['new', 'Brand new', r => r.type === 'new'],
+  ['returning', 'Returning', r => r.type === 'returning'],
+  ['growing', 'Growing', r => r.trend === 'growing'],
+  ['declining', 'Declining, still buying', r => r.trend === 'declining' && r.t12 > 0],
+  ['stopped', 'Stopped (bought prior 12, not last 12)', r => r.t12 === 0 && r.act12 === 0 && cnt(r.p, sel-23, sel-12) > 0],
+  ['quiet', 'Gone quiet', r => r.quiet],
+  ['all', 'All since 2020', r => true],
+];
+const PCOLS = [
+  ['name','Partner','str'], ['type','This month','str'], ['trend','12-mo trend','str'], ['spark','Last 24 months','none'],
+  ['act12','Months bought (of 12)','num'], ['ord12','Orders T12','num'], ['mrev','Month revenue','num'],
+  ['t12','Trailing 12','num'], ['p12','Prior 12','num'], ['yoy','YoY','num'], ['first','First seen','str'], ['last','Last seen','str'],
+];
+
+function chips(defs, st, rows) {
+  return defs.map(([k, l, fn]) => `<button class="chip${st.filter === k ? ' on' : ''}" data-chip="${k}">${typeof l === 'function' ? l() : l}<b>${rows.filter(fn).length}</b></button>`).join('');
+}
+function sortRows(rows, st) {
+  const k = st.sort, d = st.dir;
+  return rows.sort((a, b) => {
+    let x = a[k], y = b[k];
+    if (x === null || x === undefined) x = d < 0 ? -Infinity : Infinity;
+    if (y === null || y === undefined) y = d < 0 ? -Infinity : Infinity;
+    if (typeof x === 'string' || typeof y === 'string') return String(x).localeCompare(String(y)) * d;
+    return (x - y) * d;
+  });
+}
+function head(cols, st) {
+  return '<tr>' + cols.map(([k, l, t]) => `<th class="${t === 'num' ? 'num' : ''}${t === 'none' ? ' nosort' : ''}${st.sort === k ? ' sorted' + (st.dir > 0 ? ' asc' : '') : ''}" data-sort="${t === 'none' ? '' : k}">${l}</th>`).join('') + '</tr>';
+}
+function bindCommon(st, rerender) {
+  document.querySelectorAll('[data-chip]').forEach(b => b.onclick = () => { st.filter = b.dataset.chip; st.limit = 100; st.open = null; rerender(); });
+  document.querySelectorAll('th[data-sort]').forEach(th => th.onclick = () => {
+    const k = th.dataset.sort; if (!k) return;
+    if (st.sort === k) st.dir = -st.dir; else { st.sort = k; st.dir = ['name','first','type','trend'].includes(k) ? 1 : -1; }
+    rerender();
+  });
+  const q = $('#q');
+  if (q) q.oninput = () => { st.q = q.value; st.limit = 100; const pos = q.selectionStart; rerender(); const n = $('#q'); n.focus(); n.setSelectionRange(pos, pos); };
+  const more = $('#more'); if (more) more.onclick = () => { st.limit += 200; rerender(); };
+}
+function csv(name, header, data) {
+  const cell = v => { const s = String(v ?? ''); return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
+  const text = [header, ...data].map(r => r.map(cell).join(',')).join('\r\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([text], {type:'text/csv'}));
+  a.download = name; a.click();
+}
+
+function renderPartners() {
+  const st = TS.partners;
+  const all = partnerRows();
+  const q = st.q.trim().toLowerCase();
+  const base = q ? all.filter(r => r.p.nl.includes(q)) : all;
+  const fn = (PF.find(f => f[0] === st.filter) || PF[0])[2];
+  const rows = sortRows(base.filter(fn), st);
+  const shown = rows.slice(0, st.limit);
+  let body = '';
+  shown.forEach(r => {
+    const p = r.p;
+    body += `<tr class="row${st.open === p.id ? ' open' : ''}" data-id="${p.id}">
+      <td><strong>${esc(p.n)}</strong>${r.quiet ? ' <span class="tag t-quiet">Gone quiet</span>' : ''}</td>
+      <td>${r.type ? `<span class="tag t-${r.type}">${TYPE_LABEL[r.type]}</span>` : '<span style="color:#cbd5e1">-</span>'}</td>
+      <td><span class="tag t-${r.trend === 'new' ? 'new' : r.trend}">${TREND_LABEL[r.trend]}</span></td>
+      <td>${spark(p, sel)}</td>
+      <td class="num">${r.act12}</td><td class="num">${r.ord12 || '-'}</td>
+      <td class="num">${r.mrev ? money(r.mrev) : '-'}</td>
+      <td class="num"><strong>${money(r.t12)}</strong></td><td class="num">${money(r.p12)}</td>
+      <td class="num">${r.yoy === null ? '<span class="flat">new</span>' : delta(r.t12, r.p12, true)}</td>
+      <td class="num">${fmtDate(r.first)}</td><td class="num">${r.last.length === 10 ? fmtDate(r.last) : labShort(r.lastIdx)}${r.lastIdx !== p.last ? `<div style="font-size:10px;color:#15803d">latest ${fmtDate(p.ld)}</div>` : ''}</td></tr>`;
+    if (st.open === p.id) body += `<tr class="detail"><td colspan="${PCOLS.length}">${partnerDetail(p)}</td></tr>`;
+  });
+  $('#tabBody').innerHTML = `
+    <div class="toolbar"><input type="search" id="q" placeholder="Search partners" value="${esc(st.q)}"> ${chips(PF, st, base)}
+      <button class="btn" id="export">Export CSV</button></div>
+    <div class="tablewrap"><table><thead>${head(PCOLS, st)}</thead><tbody>${body || `<tr><td colspan="${PCOLS.length}" class="empty">No partners match</td></tr>`}</tbody></table></div>
+    ${rows.length > shown.length ? `<div class="more"><button class="btn" style="margin:0" id="more">Show more (${rows.length - shown.length} left)</button></div>` : ''}
+    <div class="empty">${rows.length} partners. Click a row for end users, product mix and recent orders. Month figures are for ${lab(sel)}; trailing 12 ends there too.</div>`;
+  bindCommon(st, renderPartners);
+  document.querySelectorAll('tr.row').forEach(tr => tr.onclick = () => { const id = +tr.dataset.id; st.open = st.open === id ? null : id; renderPartners(); });
+  $('#export').onclick = () => csv(`partners_${M[sel]}_${st.filter}.csv`,
+    ['Partner','State','Distributors','This month','12-mo trend','Gone quiet','Months bought (of 12)','Orders T12','Month revenue','Trailing 12','Prior 12','YoY %','First seen','Last seen'],
+    rows.map(r => [r.p.n, r.p.s, r.p.d, r.type ? TYPE_LABEL[r.type] : '', TREND_LABEL[r.trend], r.quiet ? 'yes' : '', r.act12, r.ord12,
+      r.mrev.toFixed(2), r.t12.toFixed(2), r.p12.toFixed(2), r.yoy === null ? '' : (r.yoy*100).toFixed(1), r.first, r.last]));
+}
+
+function partnerDetail(p) {
+  const i = sel, Y = +M[i].slice(0,4), years = [Y-2, Y-1, Y];
+  const life = p.m.reduce((t, x) => t + x[1], 0);
+  const eu = p.eu.map(e => `<tr><td>${esc(e[0])}</td><td class="num">${e[2]}</td><td class="num">${money(e[1])}</td><td class="num">${fmtDate(e[3])}</td><td class="num">${fmtDate(e[4])}</td></tr>`).join('');
+  const fams = Object.entries(p.px).map(([f, ys]) => [f, ys, years.reduce((t, y) => t + (ys[y] || 0), 0)])
+    .filter(x => x[2] !== 0).sort((a, b) => b[2] - a[2]);
+  const px = fams.map(([f, ys]) => `<tr><td>${esc(f)}</td>${years.map(y => `<td class="num">${ys[y] ? money(ys[y]) : '-'}</td>`).join('')}</tr>`).join('');
+  const end = M[i] + '-31';
+  const lines = D.lines.filter(l => l[1] === p.id).slice(-15).reverse();
+  const nAfter = lines.filter(l => l[0] > end).length;
+  const ln = lines.map(l => `<tr${l[0] > end ? ' class="after"' : ''}><td>${fmtDate(l[0])}</td><td>${esc(l[2])}</td><td>${esc(l[3])}</td><td>${esc(l[4])}</td><td class="num">${l[5]}</td><td class="num">${money(l[6])}</td><td>${esc(l[7])}</td><td>${esc(l[8])}</td></tr>`).join('');
+  return `<div class="dmeta"><strong>${esc(p.n)}</strong> &middot; ${esc(p.s || 'state n/a')} &middot; ${esc(p.d)} &middot; ${money(life)} lifetime &middot; ${p.m.length} months with POS since ${fmtDate(p.fd)} &middot; ${p.euN} end users</div>
+  <div class="dgrid">
+    <div><h4>Top end users (lifetime)</h4><table><thead><tr><th>End user</th><th class="num">Orders</th><th class="num">Revenue</th><th class="num">First</th><th class="num">Last</th></tr></thead><tbody>${eu || '<tr><td colspan="5" class="empty">No end user names on file</td></tr>'}</tbody></table></div>
+    <div><h4>Product mix by year</h4><table><thead><tr><th>Product line</th>${years.map(y => `<th class="num">${y}${y === +M[NM-1].slice(0,4) ? ' YTD' : ''}</th>`).join('')}</tr></thead><tbody>${px || `<tr><td colspan="4" class="empty">No POS ${years[0]} to ${Y}</td></tr>`}</tbody></table></div>
+    <div class="wide"><h4>Most recent orders</h4>${nAfter ? `<div class="empty" style="padding-top:0">Green rows came after ${lab(i)}, the month you're viewing</div>` : ''}<table><thead><tr><th>Date</th><th>Invoice</th><th>Part</th><th>Line</th><th class="num">Qty</th><th class="num">Revenue</th><th>End user</th><th>Distributor</th></tr></thead><tbody>${ln || `<tr><td colspan="8" class="empty">No order lines since ${lab(M.indexOf(D.linesFrom))} (line detail starts there)</td></tr>`}</tbody></table></div>
+  </div>`;
+}
+
+// end users
+const EF = [
+  ['t12', 'Bought in last 12 mo', r => r.act12 > 0],
+  ['month', () => 'Bought in ' + lab(sel).slice(0,3), r => r.mrev !== null],
+  ['firsttime', 'First-time in month', r => r.type === 'new'],
+  ['repeatcust', 'Repeat customers (2+ months, active T12)', r => r.life >= 2 && r.act12 > 0],
+  ['all', 'All since 2020', r => true],
+];
+const ECOLS = [['name','End user','str'], ['type','This month','str'], ['partners','Sold by','str'], ['spark','Last 24 months','none'],
+  ['act12','Months bought (of 12)','num'], ['ord12','Orders T12','num'], ['t12','Trailing 12','num'], ['lifeRev','Lifetime','num'], ['first','First seen','str'], ['last','Last seen','str']];
+function renderEndUsers() {
+  const st = TS.endusers, i = sel;
+  const q = st.q.trim().toLowerCase();
+  const base = D.endUsers.filter(e => e.f <= i && (!q || e.search.includes(q))).map(e => {
+    const lastIdx = lastActiveUpTo(e, i);
+    return {e, name:e.n, partners:e.pl.join(', '), act12:cnt(e, i-11, i), ord12:sumArr(e.ord, i-11, i), t12:sumArr(e.rev, i-11, i),
+      lifeRev:sumArr(e.rev, 0, i), life:cnt(e, 0, i), mrev: e.act[i] ? e.rev[i] : null,
+      type: !e.act[i] ? null : e.f === i ? 'new' : 'repeat',
+      first:e.fd, last: lastIdx === e.last ? e.ld : (lastIdx >= 0 ? M[lastIdx] : ''), lastIdx};
+  });
+  const fn = (EF.find(f => f[0] === st.filter) || EF[0])[2];
+  const rows = sortRows(base.filter(fn), st);
+  const shown = rows.slice(0, st.limit);
+  const body = shown.map(r => `<tr>
+    <td class="wrap"><strong>${esc(r.name)}</strong></td>
+    <td>${r.type ? `<span class="tag t-${r.type}">${r.type === 'new' ? 'First time' : 'Repeat'}</span>` : '<span style="color:#cbd5e1">-</span>'}</td>
+    <td class="wrap">${r.e.p.map(pid => `<a style="color:#1e40af;cursor:pointer" data-p="${pid}">${esc(D.partners[pid].n)}</a>`).join(', ')}${r.e.pN > 3 ? ` +${r.e.pN - 3}` : ''}</td>
+    <td>${spark(r.e, i)}</td><td class="num">${r.act12}</td><td class="num">${r.ord12 || '-'}</td>
+    <td class="num"><strong>${money(r.t12)}</strong></td><td class="num">${money(r.lifeRev)}</td>
+    <td class="num">${fmtDate(r.first)}</td><td class="num">${r.last.length === 10 ? fmtDate(r.last) : labShort(r.lastIdx)}</td></tr>`).join('');
+  $('#tabBody').innerHTML = `
+    <div class="toolbar"><input type="search" id="q" placeholder="Search end users or partners" value="${esc(st.q)}"> ${chips(EF, st, base)}
+      <button class="btn" id="export">Export CSV</button></div>
+    <div class="tablewrap"><table><thead>${head(ECOLS, st)}</thead><tbody>${body || `<tr><td colspan="${ECOLS.length}" class="empty">No end users match</td></tr>`}</tbody></table></div>
+    ${rows.length > shown.length ? `<div class="more"><button class="btn" style="margin:0" id="more">Show more (${rows.length - shown.length} left)</button></div>` : ''}
+    <div class="empty">${rows.length} end users. Names come straight from distributor POS, so one customer can show up under a few spellings.</div>`;
+  bindCommon(st, renderEndUsers);
+  document.querySelectorAll('#tabBody a[data-p]').forEach(a => a.onclick = () => openPartner(+a.dataset.p));
+  $('#export').onclick = () => csv(`end_users_${M[i]}_${st.filter}.csv`,
+    ['End user','This month','Sold by','Months bought (of 12)','Orders T12','Trailing 12','Lifetime','First seen','Last seen'],
+    rows.map(r => [r.name, r.type === 'new' ? 'First time' : r.type ? 'Repeat' : '', r.partners, r.act12, r.ord12, r.t12.toFixed(2), r.lifeRev.toFixed(2), r.first, r.last]));
+}
+
+// orders in month
+const OCOLS = [['date','Date','str'], ['partner','Partner','str'], ['type','Partner type','str'], ['eu','End user','str'], ['parts','Products','str'], ['qty','Qty','num'], ['rev','Revenue','num'], ['doc','Invoice','str'], ['dist','Distributor','str']];
+function renderOrders() {
+  const st = TS.orders, i = sel, ym = M[i];
+  if (ym < D.linesFrom) {
+    $('#tabBody').innerHTML = `<div class="empty">Order lines are kept from ${lab(M.indexOf(D.linesFrom))} on. Pick a later month.</div>`; return;
+  }
+  const g = new Map();
+  D.lines.forEach(l => {
+    if (l[0].slice(0,7) !== ym) return;
+    const k = l[1] + '|' + (l[2] || l[0] + l[7]);
+    let o = g.get(k);
+    if (!o) { o = {date:l[0], pid:l[1], partner:D.partners[l[1]].n, doc:l[2], eu:l[7], dist:l[8], qty:0, rev:0, fams:new Set(), partsList:[]}; g.set(k, o); }
+    o.qty += l[5]; o.rev += l[6]; o.fams.add(l[4]); o.partsList.push(l[3]);
+  });
+  const q = st.q.trim().toLowerCase();
+  let rows = [...g.values()].map(o => Object.assign(o, {type: ptype(D.partners[o.pid], i), parts:[...o.fams].join(', ')}))
+    .filter(o => !q || (o.partner + ' ' + o.eu + ' ' + o.partsList.join(' ')).toLowerCase().includes(q));
+  rows = sortRows(rows, st);
+  const total = rows.reduce((t, o) => t + o.rev, 0);
+  const shown = rows.slice(0, st.limit);
+  const body = shown.map(o => `<tr><td>${fmtDate(o.date)}</td><td><a style="color:#1e40af;cursor:pointer" data-p="${o.pid}"><strong>${esc(o.partner)}</strong></a></td>
+    <td>${o.type ? `<span class="tag t-${o.type}">${TYPE_LABEL[o.type]}</span>` : ''}</td><td class="wrap">${esc(o.eu)}</td>
+    <td class="wrap" title="${esc(o.partsList.join(', '))}">${esc(o.parts)}</td><td class="num">${Math.round(o.qty)}</td>
+    <td class="num"><strong>${money(o.rev)}</strong></td><td>${esc(o.doc)}</td><td>${esc(o.dist)}</td></tr>`).join('');
+  $('#tabBody').innerHTML = `
+    <div class="toolbar"><input type="search" id="q" placeholder="Search partner, end user or part" value="${esc(st.q)}">
+      <span class="meta">${rows.length} orders &middot; ${money(total)}</span><button class="btn" id="export">Export CSV</button></div>
+    <div class="tablewrap"><table><thead>${head(OCOLS, st)}</thead><tbody>${body || `<tr><td colspan="${OCOLS.length}" class="empty">No orders</td></tr>`}</tbody></table></div>
+    ${rows.length > shown.length ? `<div class="more"><button class="btn" style="margin:0" id="more">Show more (${rows.length - shown.length} left)</button></div>` : ''}
+    ${ym < '2026-07' ? '<div class="empty">Corporate report months carry the 15th as the date and only some lines have an invoice number, so orders here are grouped by partner and end user.</div>' : ''}`;
+  bindCommon(st, renderOrders);
+  document.querySelectorAll('#tabBody a[data-p]').forEach(a => a.onclick = () => openPartner(+a.dataset.p));
+  $('#export').onclick = () => csv(`orders_${ym}.csv`, ['Date','Partner','Partner type','End user','Parts','Product lines','Qty','Revenue','Invoice','Distributor'],
+    rows.map(o => [o.date, o.partner, o.type ? TYPE_LABEL[o.type] : '', o.eu, o.partsList.join(' | '), o.parts, o.qty, o.rev.toFixed(2), o.doc, o.dist]));
+}
+
+function renderTable() {
+  document.querySelectorAll('.tab').forEach(b => b.classList.toggle('on', b.dataset.tab === tab));
+  document.querySelector('[data-tab="orders"]').textContent = 'Orders in ' + lab(sel);
+  ({partners:renderPartners, endusers:renderEndUsers, orders:renderOrders})[tab]();
+}
+document.querySelectorAll('.tab').forEach(b => b.onclick = () => { tab = b.dataset.tab; renderTable(); });
+
+$('#notes').innerHTML = `
+  <b>How to read this.</b> A partner "bought" in a month if it has any POS that month, credits included.
+  <b>Repeat</b> means it also bought in at least one of the 12 months before. <b>Brand new</b> means its first POS ever (history starts Jan 2020).
+  <b>Returning</b> means it had bought before but went 12+ months without POS. The three always add up to the month's partner count.
+  <b>Growing / Declining</b> compare trailing 12 revenue to the prior 12, with a 5% band for Flat. <b>Stopped</b> means POS in the prior 12 months and none in the last 12. <b>Gone quiet</b> means POS in 2 or more of the 12 months ending 3 months ago and nothing since.<br>
+  <b>Data.</b> Every partner, end user, invoice and dollar on this page is synthetic, generated to match the shape of a real long-tail POS ledger. Jan 2020 to Jun 2026 mimics a monthly corporate report (all dated the 15th). Jul 2026 on mimics daily distributor files.
+  ${D.euOnly} records seen only through the end-user-reporting distributor are left out because that distributor puts the end user in the reseller field.
+  Orders are distinct invoice numbers; corporate rows without one count one order per date and end user. The MTD chart reads the scrubber snapshots, like the tracker.`;
+
+function renderAll() {
+  syncQuick(); renderKPIs(); renderMix(); renderRev(); renderYoy(); renderQtr(); renderRevMix(); renderGlance(); renderTable();
+}
+renderMtd();
+renderAll();
+</script>
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daily Partner Tracker | Demo data</title>
+<script src="../assets/chart.umd.min.js"></script>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:14px;background:#f8fafc;color:#1e293b}
+  .header{background:#fff;border-bottom:1px solid #e2e8f0;padding:16px 24px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+  .header h1{font-size:16px;font-weight:600}
+  .header h1 a{color:#64748b;text-decoration:none;font-weight:400}
+  .header .meta{font-size:12px;color:#64748b}
+  .banner{margin:16px 24px 0;background:#ecfeff;border-left:4px solid #0d9488;color:#134e4a;padding:10px 14px;font-size:12px;border-radius:6px}
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;padding:20px 24px}
+  .kpi{background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:14px 18px}
+  .kpi-label{font-size:11px;color:#64748b;margin-bottom:4px}
+  .kpi-val{font-size:22px;font-weight:600;color:#1e293b}
+  .kpi-sub{font-size:11px;color:#94a3b8;margin-top:2px;line-height:1.45}
+  .charts{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:0 24px 20px}
+  .chart-card{background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:16px;min-width:0}
+  .chart-card.full{grid-column:1/-1}
+  .chart-title{font-size:13px;font-weight:600;margin-bottom:4px;color:#374151}
+  .chart-sub{font-size:11px;color:#94a3b8;margin-bottom:12px}
+  .table-card{background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:16px;margin:0 24px 24px}
+  .table-title{font-size:13px;font-weight:600;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+  input[type=search]{font:inherit;font-size:13px;padding:6px 10px;border:1px solid #cbd5e1;border-radius:8px}
+  table{width:100%;border-collapse:collapse;font-size:12px}
+  th{padding:7px 10px;text-align:left;font-size:11px;font-weight:500;color:#64748b;border-bottom:1px solid #e2e8f0;background:#f8fafc;cursor:pointer;user-select:none}
+  td{padding:7px 10px;border-bottom:1px solid #f1f5f9}
+  .num{text-align:right;font-variant-numeric:tabular-nums}
+  .wrap{overflow-x:auto}
+  @media(max-width:800px){.charts{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="header">
+  <h1><a href="../index.html#projects">&larr; Portfolio</a> &nbsp; Long-Tail Daily Partner Tracker</h1>
+  <div class="meta" id="meta"></div>
+</div>
+<div class="banner"><b>Demo with synthetic data.</b> In production this page rebuilt itself every morning from a one-click batch file: scrub the new distributor files, update the ledger, redraw. Every name and number here is fake.</div>
+<div class="kpis" id="kpis"></div>
+<div class="charts">
+  <div class="chart-card"><div class="chart-title">Daily new revenue</div><div class="chart-sub">Last 30 business days. Credits included, so a bar can dip below zero. Dashed line is the average of active days.</div><canvas id="dailyChart"></canvas></div>
+  <div class="chart-card"><div class="chart-title">MTD cumulative by month</div><div class="chart-sub">Running total per calendar month. Resets at month start.</div><canvas id="mtdChart"></canvas></div>
+  <div class="chart-card"><div class="chart-title">Partners MTD by month</div><div class="chart-sub">Distinct partners accumulated through the month. Are we adding faster than last month?</div><canvas id="partnerMtdChart"></canvas></div>
+  <div class="chart-card"><div class="chart-title">Partners per month, 24-month history</div><div class="chart-sub">Distinct partners with POS each month. Dashed line is the 12-month average.</div><canvas id="partnerHistChart"></canvas></div>
+  <div class="chart-card full"><div class="chart-title">Top 5 partners, daily activity</div><div class="chart-sub">Click a name in the legend to hide or show it</div><canvas id="partnerChart" height="90"></canvas></div>
+</div>
+<div class="table-card">
+  <div class="table-title">Top purchases, last 10 days</div>
+  <div class="wrap"><table><thead><tr><th>Partner</th><th>Dist</th><th>Part</th><th class="num">Qty</th><th class="num">Revenue</th><th>End user</th></tr></thead><tbody id="buys"></tbody></table></div>
+</div>
+<div class="table-card">
+  <div class="table-title"><span>Partner totals since daily tracking started</span><input type="search" id="q" placeholder="Search partners"></div>
+  <div class="wrap"><table><thead><tr><th data-k="n">Partner</th><th class="num" data-k="o">Orders</th><th class="num" data-k="r">Total revenue</th><th class="num" data-k="f">First seen</th><th class="num" data-k="l">Last seen</th></tr></thead><tbody id="totals"></tbody></table></div>
+</div>
+<script>
+const D = /*__DATA__*/null;
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const money = v => (v < 0 ? '-$' : '$') + Math.abs(Math.round(v)).toLocaleString();
+const COLORS = ["#3b82f6","#f97316","#10b981","#8b5cf6","#ef4444","#eab308","#06b6d4","#ec4899"];
+const K = D.kpi;
+const monthName = new Date(D.openMonth + '-02').toLocaleString('en-US', {month:'long'});
+$('#meta').textContent = `POS through ${D.asOf}  |  Generated ${D.generated}`;
+const projTxt = K.proj ? money(K.proj) : 'n/a';
+const vsFlat = K.proj && K.flat ? ((K.proj / K.flat - 1) * 100).toFixed(1) : null;
+$('#kpis').innerHTML = [
+  ['Current MTD revenue', money(K.mtd), `as of ${D.asOf}`],
+  ['Partners MTD', K.partnersMtd, `bought in ${monthName} so far`],
+  ['Unique partners (tracked)', K.unique, `since daily tracking began &middot; ${K.ledgerPartners.toLocaleString()} in the ledger since 2020`],
+  ['Daily run rate', money(K.runRate), `${K.elapsed} business days of data in ${monthName}`],
+  ['Projected month-end', projTxt, `${K.remaining} business days left. Paced against how ${monthName} normally books (${Math.round(K.share*100)}% done by now).` + (vsFlat !== null ? `<br><span style="color:${vsFlat >= 0 ? '#15803d' : '#b91c1c'}">${vsFlat >= 0 ? '+' : ''}${vsFlat}% vs a flat run rate (${money(K.flat)})</span>` : '')],
+  ['Last full month', money(K.lastFull.revenue), `${K.lastFull.partners} partners in ${K.lastFull.month}`],
+].map(([l, v, s], i) => `<div class="kpi"${i === 4 ? ' style="border-color:#fbbf24"' : ''}><div class="kpi-label">${l}</div><div class="kpi-val"${i === 4 ? ' style="color:#b45309"' : ''}>${v}</div><div class="kpi-sub">${s}</div></div>`).join('');
+
+$('#buys').innerHTML = D.topBuys.map(b => `<tr><td><strong>${esc(b.p)}</strong></td><td style="color:#64748b">${esc(b.d)}</td><td>${esc(b.part)}</td><td class="num">${b.q}</td><td class="num"><strong>${money(b.r)}</strong></td><td style="color:#94a3b8;font-size:11px">${esc(b.eu)}</td></tr>`).join('');
+
+let sortK = 'r', dir = -1;
+function renderTotals() {
+  const q = $('#q').value.toLowerCase();
+  const rows = D.totals.filter(t => t.n.toLowerCase().includes(q)).sort((a, b) => (a[sortK] > b[sortK] ? 1 : -1) * dir);
+  $('#totals').innerHTML = rows.map(t => `<tr><td>${esc(t.n)}</td><td class="num">${t.o}</td><td class="num"><strong>${money(t.r)}</strong></td><td class="num">${t.f}</td><td class="num">${t.l}</td></tr>`).join('') || '<tr><td colspan="5" style="color:#94a3b8">No match</td></tr>';
+}
+$('#q').oninput = renderTotals;
+document.querySelectorAll('th[data-k]').forEach(th => th.onclick = () => { const k = th.dataset.k; dir = sortK === k ? -dir : (k === 'n' ? 1 : -1); sortK = k; renderTotals(); });
+renderTotals();
+
+if (typeof Chart !== 'undefined') {
+  Chart.defaults.font.size = 11; Chart.defaults.color = '#64748b';
+  const grid = {color:'#f1f5f9'}, $tick = v => '$' + Math.round(v).toLocaleString();
+  const last30 = D.daily.slice(-30);
+  const act = last30.filter(d => d.revenue > 0);
+  const avg = act.reduce((s, d) => s + d.revenue, 0) / (act.length || 1);
+  new Chart($('#dailyChart'), {type:'bar', data:{labels:last30.map(d => d.date.slice(5)), datasets:[
+    {label:'New revenue', data:last30.map(d => d.revenue), backgroundColor:last30.map(d => d.date.startsWith(D.openMonth) ? '#3b82f6' : '#94a3b8'), borderRadius:4, order:2},
+    {type:'line', label:'Avg (active days)', data:last30.map(() => Math.round(avg)), borderColor:'#f97316', borderWidth:2, borderDash:[6,3], pointRadius:0, order:1}]},
+    options:{interaction:{mode:'index', intersect:false}, plugins:{tooltip:{callbacks:{label:c => c.dataset.label + ': ' + money(c.parsed.y)}}}, scales:{y:{ticks:{callback:$tick}, grid}, x:{grid:{display:false}}}}});
+  const lineSet = (obj, key) => { const days = [...new Set(Object.values(obj).flat().map(d => d.day))].sort((a, b) => a - b);
+    return {labels:days.map(d => 'Day ' + d), datasets:Object.entries(obj).map(([m, s], i) => ({label:m, data:days.map(d => { const f = s.find(x => x.day === d); return f ? f[key] : null; }), borderColor:COLORS[i % COLORS.length], backgroundColor:'transparent', tension:.3, pointRadius:3, spanGaps:false}))}; };
+  new Chart($('#mtdChart'), {type:'line', data:lineSet(D.monthly, 'mtd'), options:{scales:{y:{ticks:{callback:$tick}, grid}, x:{grid:{display:false}}}}});
+  new Chart($('#partnerMtdChart'), {type:'line', data:lineSet(D.partnerMtd, 'partners'), options:{scales:{y:{beginAtZero:true, grid, title:{display:true, text:'Distinct partners'}}, x:{grid:{display:false}}}}});
+  const ph = D.partnerHist, a12 = ph.slice(-12).reduce((a, b) => a + b.partners, 0) / 12;
+  new Chart($('#partnerHistChart'), {type:'bar', data:{labels:ph.map(d => d.month), datasets:[
+    {label:'Partners with POS', data:ph.map(d => d.partners), backgroundColor:'#3b82f6', borderRadius:3, order:2},
+    {type:'line', label:'12-mo average (' + a12.toFixed(0) + ')', data:ph.map(() => a12), borderColor:'#f59e0b', borderDash:[5,4], borderWidth:2, pointRadius:0, order:1}]},
+    options:{plugins:{tooltip:{callbacks:{afterBody:it => 'Revenue: ' + money(ph[it[0].dataIndex].revenue)}}}, scales:{y:{beginAtZero:true, grid}, x:{grid:{display:false}, ticks:{maxRotation:60, minRotation:45, font:{size:9}}}}}});
+  new Chart($('#partnerChart'), {type:'line', data:{labels:D.daily.map(d => d.date.slice(5)), datasets:Object.entries(D.top5).map(([n, s], i) => ({label:n, data:s.map(d => d.revenue), borderColor:COLORS[i], backgroundColor:'transparent', tension:.3, pointRadius:2}))},
+    options:{scales:{y:{ticks:{callback:$tick}, grid}, x:{grid:{display:false}, ticks:{maxRotation:45, font:{size:9}}}}}});
+} else document.querySelectorAll('canvas').forEach(c => c.outerHTML = '<div style="color:#94a3b8;font-size:12px">Charts need an internet connection to load Chart.js.</div>');
+</script>
+</body>
+</html>

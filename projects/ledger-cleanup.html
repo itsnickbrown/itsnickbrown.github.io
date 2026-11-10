@@ -1,0 +1,55 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Finding and fixing bad POS data | Nick Brown</title><meta name="description" content="The ledger said one month was up 93%. It wasn&#x27;t. How I traced double counting, name splits and end users hiding in the reseller list, and fixed them without deleting real revenue.">
+<link rel="stylesheet" href="../assets/site.css"></head><body><nav class="nav"><div class="in"><a class="brand" href="../index.html">Nick Brown</a>
+<div class="links"><a href="../index.html#projects">Projects</a><a href="../index.html#how">How I use AI</a><a href="../code/">Code</a><a href="../index.html#contact">Contact</a></div></div></nav>
+<main class="wrap">
+<div class="crumb"><a href="../index.html#projects">&larr; All projects</a></div>
+<div class="ph"><div class="eyebrow">Case study</div><h1>Finding and fixing bad POS data</h1><p>The ledger said one month was up 93%. It wasn't. How I traced double counting, name splits and end users hiding in the reseller list, and fixed them without deleting real revenue.</p>
+<div class="tags"><span class="tag">Python</span><span class="tag">Data quality</span><span class="tag">POS data</span></div><div class="cta"><a class="btn" href="#" data-ask="Finding and fixing bad POS data">Ask the bot about this</a></div></div>
+<div class="cols"><article class="body">
+<h2>What went wrong</h2>
+<p>Distributor files are cumulative: each one repeats the month so far. The ledger was supposed to skip lines it already had. It didn't, because the line ID hashed raw Excel values, and the types drifted between exports. Line 3 in one file was 3.0 in the next. Same sale, new ID, counted again. One month read 93% high.</p>
+<h2>The fix</h2>
+<p>I normalized every field before building the ID, then wrote a one-time cleanup. The key detail is what it leaves alone. Older rows from the corporate report have no line numbers and only half have invoice numbers. Two real units of the same part to the same customer in the same month look exactly like a duplicate. Deduping those would delete real revenue, so the script skips them.</p>
+<div class="demo" id="dedupe">
+<h3>Try it: the line ID bug</h3>
+<div class="sub">Rows from three daily files. Pick how the ID is built and see what gets counted.</div>
+<div class="row"><label><input type="radio" name="idm" value="raw" checked> Old ID (raw values)</label><label><input type="radio" name="idm" value="norm"> Fixed ID (normalized)</label></div>
+<table><thead><tr><th>File</th><th>Invoice</th><th>Line</th><th>Part</th><th>Revenue</th><th>ID</th></tr></thead><tbody id="ddBody"></tbody></table>
+<div class="out" id="ddOut"></div>
+</div>
+<h2>Name splits and fake partners</h2>
+<p>The same company showed up under a DBA, an FKA, an account number suffix or a "(GOVT ONLY)" tag. One record looked like it was buying and the other looked like it had stopped. I kept a merge map in the code, checked each pair by raw name, and added about 90 entries. Acquisitions went in too, so a buyer that now orders under its new owner's name stays one partner.</p>
+<div class="demo" id="merge">
+<h3>Try it: one partner, many spellings</h3>
+<div class="sub">Type a raw reseller name the way a distributor might send it.</div>
+<div class="row"><input type="text" id="mgIn" value="Northwind Data Group, Inc. (FKA Northwind)" style="flex:1;min-width:260px"></div>
+<div class="out" id="mgOut"></div>
+</div>
+<p>Then there were 79 "partners" that were actually end users, because one distributor puts the customer in the reseller field. They came out of enrichment and mailing lists. A month of data was missing entirely, which quietly drags down every trailing-12 number, so the dashboard now prints a warning band whenever a month has no rows.</p>
+<h2>What the cleanup turned up</h2>
+<ul>
+<li>The tier workbook covered 199 of about 1,625 partners. Roughly 320 buying partners were in no tier.</li>
+<li>The newsletter list reached 30 of 450 buying partners and had a 23% hard bounce rate. I rebuilt it from the ledger.</li>
+</ul>
+<p>Source: <a href="../code/dedupe_ledger.py">dedupe_ledger.py</a> and the merge map at the top of <a href="../code/longtail_dashboard.py">longtail_dashboard.py</a>.</p>
+</article>
+<aside class="side"><div class="box"><h4>At a glance</h4><div class="kpis"><div><b>93%</b><span>overstatement found</span></div><div><b>~90</b><span>name splits merged</span></div><div><b>79</b><span>fake 'partners' removed</span></div><div><b>0</b><span>duplicates since the fix</span></div></div></div>
+<div class="box"><h4>Context</h4>Built while managing the long-tail reseller book at a network test and security tools vendor that sells only through two-tier distribution. Names and numbers in demos are synthetic.</div></aside></div>
+<div class="next"><a href="daily-tracker.html">&larr; Daily POS tracker and month-end projection</a><a href="segmentation.html">Recency segments and honest attribution &rarr;</a></div>
+</main><footer><div class="wrap">Built by Nick Brown with Claude. All demo data is synthetic. Hosted free on GitHub Pages.</div></footer>
+<script src="../assets/bot.js" data-base="../"></script><script>
+const ROWS=[['day_0914.xlsx','7001842',3,'LT-100',2650],['day_0914.xlsx','7001842',4,'SUP-1YS-LT',420],['day_0915.xlsx','7001842','3.0','LT-100',2650],['day_0915.xlsx','7001842','4.0','SUP-1YS-LT',420],['day_0915.xlsx','7001907',1,'WA-PRO-KIT',4236],['day_0916.xlsx','7001842',3,'LT-100',2650],['day_0916.xlsx','7001907','1.0','WA-PRO-KIT',4236],['day_0916.xlsx','7002011',1,'NA-300',9559]];
+const norm=v=>{const f=parseFloat(v);return isNaN(f)?String(v).toUpperCase():String(f===Math.floor(f)?Math.floor(f):f)};
+function dd(){const m=document.querySelector('input[name=idm]:checked').value,seen=new Set();let kept=0,cut=0,body='';
+ROWS.forEach(r=>{const id=m==='raw'?r[1]+'|'+r[2]+'|'+r[3]:r[1]+'|'+norm(r[2])+'|'+norm(r[3]);const dup=seen.has(id);seen.add(id);dup?cut+=r[4]:kept+=r[4];
+body+=`<tr class="${dup?'dup':''}"><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td><td>$${r[4].toLocaleString()}</td><td><code>${id}</code></td></tr>`});
+document.getElementById('ddBody').innerHTML=body;const real=2650+420+4236+9559;
+document.getElementById('ddOut').innerHTML=m==='raw'?`Counted <b>$${kept.toLocaleString()}</b>. Real sales were $${real.toLocaleString()}. That is <b>${Math.round((kept/real-1)*100)}% high</b>, because "3" and "3.0" look like different lines.`:`Counted <b>$${kept.toLocaleString()}</b>, which matches the real sales. Removed $${cut.toLocaleString()} of repeats.`}
+document.querySelectorAll('input[name=idm]').forEach(e=>e.onchange=dd);dd();
+const MERGES={'northwind data group fka northwind':'northwind data group','harbor tech cc 460998':'harbor tech','summit federal govt only':'summit federal','bluepeaksystems':'blue peak systems','keystone it':'atlas digital'};
+function key(raw){return raw.toLowerCase().replace(/[^a-z0-9 ]+/g,' ').split(/\s+/).filter(w=>w&&!['inc','llc','corp','co','the','dba','ltd'].includes(w)).join(' ')}
+function mg(){const raw=document.getElementById('mgIn').value,k=key(raw),m=MERGES[k];
+document.getElementById('mgOut').innerHTML=`Normalized key: <code>${k||'(empty)'}</code><br>`+(m?`Merge map hit. Rolls up to <code>${m}</code>, so this is one partner, not two.`:`No merge entry. Counted as its own partner. Try "Harbor Tech (CC#460998)" or "Summit Federal (GOVT ONLY)".`)}
+document.getElementById('mgIn').oninput=mg;mg();
+</script></body></html>
