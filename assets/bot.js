@@ -23,7 +23,7 @@
     {k: 'attribution impact measure causation selection effect touched untouched baseline proof', a: () =>
       `Partners he touched were up 28.5% on trailing 12 while untouched partners were down 11.1%. He did not claim that as impact. Outreach had just started, so the gap was a selection effect: it proved the targeting picked the right partners. He froze a baseline to rerun once the window was fair. ${L('projects/segmentation.html', 'More on this')}.`},
     {k: 'results numbers revenue quota growth performance achievement win', a: () =>
-      `September closed at 163% of quota and up 7.4% year over year across 90 buying partners. He also ran outreach to about 25 overlap partners, a six-issue partner newsletter, and vetted about a dozen partner applications. Exact revenue figures are left off this site on purpose.`},
+      `Nick finished at 166% of a $450K monthly quota ($5.4M a year). September was up 7.4% year over year across 90 buying partners. He also ran outreach to about 25 overlap partners, a six-issue partner newsletter, and vetted about a dozen partner applications. Exact revenue figures are left off this site on purpose.`},
     {k: 'skills claude custom list pos analysis vetting escalation email account planning weekly report', a: () =>
       `Custom skills include pos-analysis, partner-vetting, account-planning, weekly-activity-report, escalation-email, contact-finder, cold-email, copy-editing and sales-enablement, plus a branded slide skill for QBR decks. Each one encodes how he actually does the task, so the output starts close to done. ${L('projects/claude-skills.html', 'See the skills')}.`},
     {k: 'vetting partner application approve decline hold inbound reseller qualify', a: () =>
@@ -35,7 +35,7 @@
     {k: 'this site bot chatbot how built work you are', a: () =>
       `This site is static HTML on GitHub Pages. I am a small search bot that runs in your browser. I match your question against answers written from the case studies. There is no AI model behind me and nothing you type leaves the page.`},
     {k: 'contact hire reach email linkedin talk interview resume available', a: () =>
-      `The best way to reach Nick is through the contact links at the ${L('index.html#contact', 'bottom of the home page')}.`},
+      `Email Nick at <a href="mailto:nicholas.brown.umd@gmail.com">nicholas.brown.umd@gmail.com</a> or find him on <a href="https://www.linkedin.com/in/nick--brown" target="_blank" rel="noopener">LinkedIn</a>. His resume is ${L('resume.html', 'here')}.`},
     {k: 'roles job looking want next position channel enablement operations', a: () =>
       `Nick is looking at channel and partner management, partner enablement, and AI enablement roles, especially ones where AI adoption is part of the job.`},
     {k: 'newsletter campaign marketing email open rate webinar launch', a: () =>
