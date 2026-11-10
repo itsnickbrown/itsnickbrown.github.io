@@ -6,7 +6,18 @@
   const L = (path, text) => `<a href="${BASE}${path}">${text}</a>`;
 
   const KB = [
-    {k: 'who nick about background summary yourself intro introduce experience career', a: () =>
+
+    {k: 'work working job current employer company now latest most recent role title netally channel account manager', a: () =>
+      `Nick was most recently a Channel Account Manager at NetAlly, a maker of network test and cybersecurity tools sold only through two-tier distribution. He managed national distributors (Anixter/WESCO, Ingram Micro, TD SYNNEX) and about 1,600 smaller resellers, and finished at 166% of a $450K monthly quota. He's now looking for his next role. Full details are on his ${L('resume.html', 'resume')}.`},
+    {k: 'previous past history career before tessco hopkins johns jobs worked employers companies timeline', a: () =>
+      `Before NetAlly, Nick was a Strategic Planner and Vendor Manager at Tessco Technologies, a distributor of wireless and network infrastructure products. He ran a $53M supplier portfolio and grew it by $20M a year. He started his career at Johns Hopkins University and Johns Hopkins Hospital in contracts, compliance and IT. See his ${L('resume.html', 'resume')}.`},
+    {k: 'college university school degree education study studied graduate major umd maryland bachelor', a: () =>
+      `Nick has a bachelor's degree in Environmental Science from University of Maryland University College.`},
+    {k: 'live lives living located location based city state timonium area hometown', a: () =>
+      `Nick is based in Timonium, Maryland, near Baltimore.`},
+    {k: 'tools software salesforce dynamics sap crm competencies strengths good at', a: () =>
+      `On his resume: Salesforce, Dynamics, SAP and AI workflow automation with Claude. His core strengths are two-tier channel strategy, distributor management, partner recruitment and enablement, partner programs (deal registration, SPIFFs, MDF), POS analysis, forecasting and product launches.`},
+    {k: 'who nick about background summary yourself intro introduce', a: () =>
       `Nick Brown is a channel manager whose career runs through IT, compliance, contracts, distribution and channel sales. He most recently managed about 1,600 smaller reseller partners for a network test and security tools vendor that sells only through distribution. Before that he was a vendor manager and strategic planner at a distributor, so he has worked both sides of the vendor and distributor relationship. This site shows the AI and data work he built in that role.`},
     {k: 'ai claude how use llm tools approach workflow pair program prompt', a: () =>
       `Nick uses Claude as a working partner. He writes the rules and definitions, Claude helps write the code, and he checks every number against the source. He also built 11+ reusable Claude skills for recurring work (POS analysis, partner vetting, account plans, weekly reports) and a context file so every session starts with his accounts, channel model and writing rules. See ${L('projects/claude-skills.html', 'Claude skills and AI workflow')}.`},
@@ -48,21 +59,39 @@
     forecasting: 'forecast', predict: 'forecast', projection: 'projection', segments: 'segment', tier: 'tiers',
     hiring: 'hire', job: 'job', jobs: 'job', fake: 'fake', real: 'real', privacy: 'privacy', hello: 'intro', hi: 'intro', hey: 'intro'};
   const STOP = new Set('the a an and or of to in on for is are was were do does did how what why who with my your his he it this that you me can i about tell show any'.split(' '));
-  const toks = s => s.toLowerCase().replace(/[^a-z0-9 ]/g, ' ').split(/\s+/).filter(w => w && !STOP.has(w)).map(w => SYN[w] || w.replace(/s$/, ''));
+  const toks = s => s.toLowerCase().replace(/[^a-z0-9 ]/g, ' ').split(/\s+/).filter(w => w && !STOP.has(w)).map(w => SYN[w] || w).map(w => w.length > 4 ? w.replace(/(ing|ed|es|s)$/, '') : w);
   const IDX = KB.map(e => new Set(toks(e.k)));
+
+  // Fallback: search the resume line by line and quote the best match.
+  function searchResume(t) {
+    const R = window.RESUME || [];
+    let best = null, top = 0;
+    R.forEach(r => {
+      const words = new Set(toks(r.t + ' ' + r.o + ' ' + r.s));
+      let sc = r.s === 'Core Competencies' ? -1 : 0;
+      t.forEach(w => { if (words.has(w)) sc += w.length > 4 ? 2 : 1; });
+      if (sc > top) { top = sc; best = r; }
+    });
+    if (!best || top < 2) return null;
+    const where = best.o ? `at ${best.o}` : (best.s ? `under ${best.s}` : '');
+    return {score: top, text: `From Nick's resume${where ? ' (' + where + ')' : ''}: ${best.t} ${L('resume.html', 'See the full resume')}.`};
+  }
   function answer(q) {
     const t = toks(q);
     let best = -1, score = 0;
     IDX.forEach((set, i) => {
       let s = 0;
-      t.forEach(w => { if (set.has(w)) s += 2; else for (const k of set) if (k.length > 3 && (k.startsWith(w) || w.startsWith(k))) { s += 1; break; } });
+      t.forEach(w => { const wt = w.length > 3 ? 2 : 1; if (set.has(w)) s += wt; else if (w.length > 3) for (const k of set) if (k.length > 3 && (k.startsWith(w) || w.startsWith(k))) { s += 1; break; } });
       if (s > score) { score = s; best = i; }
     });
-    if (best < 0 || score < 2) return `I don't have a good answer for that one. Try asking about the dashboards, data cleanup, forecasting, Claude skills, results, or whether the data is real.`;
-    return KB[best].a();
+    const hit = searchResume(t);
+    if (hit && hit.score >= score + 2) return hit.text;
+    if (best >= 0 && score >= 2) return KB[best].a();
+    if (hit) return hit.text;
+    return `I don't have a good answer for that one. Try asking where Nick worked, where he went to school, how he uses AI, his results, or whether the demo data is real.`;
   }
 
-  const SUG = ['How does Nick use AI?', 'What results did he get?', 'Is this real data?', 'What was wrong with the data?', 'What Claude skills did he build?'];
+  const SUG = ['Where did Nick work?', 'How does Nick use AI?', 'What results did he get?', 'Where did he go to college?', 'Is this real data?'];
   const html = `<button id="botBtn" aria-controls="bot" aria-expanded="false">Ask about my work</button>
   <div id="bot" role="dialog" aria-label="Ask about my work">
     <div class="top"><div><b>Ask about Nick's work</b><span>Runs in your browser. Answers come from this site.</span></div><button id="botX" aria-label="Close">&times;</button></div>

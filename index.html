@@ -39,7 +39,7 @@
 <div class="contact-links"><a class="btn primary" href="mailto:nicholas.brown.umd@gmail.com?subject=Saw%20your%20portfolio">Email me</a><a class="btn" href="https://www.linkedin.com/in/nick--brown" target="_blank" rel="noopener">LinkedIn</a><a class="btn" href="resume.html">Resume</a><a class="btn" href="resume/Nick_Brown_Resume.pdf">Download PDF</a></div>
 <p class="contact-email">nicholas.brown.umd@gmail.com &middot; Timonium, MD</p></div></section>
 </main><footer><div class="wrap">Built by Nick Brown with Claude. All demo data is synthetic. Hosted free on GitHub Pages.</div></footer>
-<script src="assets/bot.js?v=7ad7c58a" data-base=""></script><script>
+<script src="assets/resume-index.js?v=b0f16a5a"></script><script src="assets/bot.js?v=b507ed39" data-base=""></script><script>
 const q=document.getElementById('q'),cards=[...document.querySelectorAll('.card')];let tag='';
 function f(){const s=q.value.toLowerCase().trim();let n=0;cards.forEach(c=>{const ok=(!tag||c.dataset.tags.split('|').includes(tag))&&(!s||s.split(/\s+/).every(w=>c.dataset.search.includes(w)));c.hidden=!ok;n+=ok});document.getElementById('none').hidden=n>0}
 q.oninput=f;document.querySelectorAll('.chip').forEach(b=>b.onclick=()=>{tag=b.dataset.t;document.querySelectorAll('.chip').forEach(x=>x.classList.toggle('on',x===b));f()});
