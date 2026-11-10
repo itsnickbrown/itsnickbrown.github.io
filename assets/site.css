@@ -209,3 +209,11 @@ p code,li code,.out code{background:#f5f5f7;padding:1px 6px;border-radius:5px;fo
 .plan-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px}
 @media(max-width:860px){.teaser{flex-direction:column;align-items:flex-start;padding:28px 22px}.teaser h2{font-size:28px}.how.three{grid-template-columns:1fr}.shaper{padding:22px}.shaper-form{grid-template-columns:1fr}.step{padding:20px}}
 .shaper-form label{min-width:0}.shaper-form select{width:100%}
+.who{margin-top:18px;border-top:1px solid #ececf0;padding-top:18px}
+.who-lead{font-weight:600;margin-bottom:12px}
+.who-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.who-grid label{display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:600;color:var(--soft);min-width:0}
+.who-grid input{font:inherit;font-size:16px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;width:100%}
+.who-grid input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(0,113,227,.2)}
+.who-note{font-size:13px;color:var(--soft);margin-top:10px}
+@media(max-width:860px){.who-grid{grid-template-columns:1fr}}

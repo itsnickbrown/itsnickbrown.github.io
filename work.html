@@ -4,7 +4,7 @@
 <meta property="og:title" content="Work with me | Nick Brown"><meta property="og:description" content="What Nick Brown would bring to your team, how he&#x27;d learn your business, and a plan you can shape to your needs.">
 <meta property="og:image" content="https://itsnickbrown.github.io/assets/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="627">
 <meta property="og:url" content="https://itsnickbrown.github.io/"><meta name="twitter:card" content="summary_large_image">
-<link rel="stylesheet" href="assets/site.css?v=c2617cd1"></head><body><nav class="nav"><div class="in"><a class="brand" href="index.html" style="text-decoration:none">Nick Brown</a>
+<link rel="stylesheet" href="assets/site.css?v=db5896f9"></head><body><nav class="nav"><div class="in"><a class="brand" href="index.html" style="text-decoration:none">Nick Brown</a>
 <div class="links"><a href="index.html#projects">Projects</a><a href="work.html">Work with me</a><a href="index.html#how">How I use AI</a><a href="resume.html">Resume</a><a class="btn primary" style="padding:6px 14px;font-size:14px;color:#fff" href="index.html#contact">Get in touch</a></div></div></nav>
 <main class="wrap">
 <header class="hero"><div class="eyebrow">Work with me</div>
@@ -44,7 +44,13 @@
 <label>Looking for<select id="mode"></select></label>
 </div>
 <div class="plan" id="plan"></div>
-<div class="plan-actions"><a class="btn primary" id="send" href="#">Send this plan to Nick</a><button class="btn" id="copy" type="button">Copy this plan</button></div>
+<div class="plan-actions"><button class="btn primary" id="sendOpen" type="button">Send this plan to Nick</button><button class="btn" id="copy" type="button">Copy this plan</button></div>
+<div class="who" id="who" hidden>
+<p class="who-lead">A little context helps me reply with something useful. All optional.</p>
+<div class="who-grid"><label>Your name<input id="wName" autocomplete="name"></label><label>Company<input id="wCo" autocomplete="organization"></label><label>Your role<input id="wRole" autocomplete="organization-title" placeholder="e.g. VP of Sales"></label></div>
+<div class="plan-actions"><a class="btn primary" id="send" href="#">Open email with plan</a><button class="btn" id="whoCancel" type="button">Cancel</button></div>
+<p class="who-note">This opens your own email app with everything filled in. Nothing is sent until you hit send there.</p>
+</div>
 </div></section>
 
 <section id="contact"><div class="contact"><div><h2>Let's talk.</h2><p class="lead" style="margin-bottom:0">Open to AI enablement and transformation roles, consulting and freelance projects, and channel and partner roles.</p></div>
@@ -103,7 +109,7 @@ $('#pain').value = 'adoption';
 function plan() {
   const t = TEAMS[$('#team').value], p = PAINS[$('#pain').value], m = MODE[$('#mode').value];
   const lines = [
-    `For ${t.who} where "${p.label.toLowerCase()}":`,
+    `For ${t.who}. Biggest headache: ${p.label}.`,
     `${m.when[0]}, I'd ${p.start}.`,
     `${m.when[1]}, I'd build ${p.build}, working with your ${t.people}.`,
     `${m.when[2]}, the goal is ${p.win}, with the before-and-after measured.`,
@@ -111,10 +117,20 @@ function plan() {
   $('#plan').innerHTML = `<div class="plan-head">Your plan</div><p class="plan-lead">${lines[0]}</p><ol>${lines.slice(1).map(l => `<li>${l}</li>`).join('')}</ol>
     <p class="plan-proof">Closest work I've already done: <a href="projects/${p.proof[0]}.html">${p.proof[1]}</a> and <a href="projects/${p.proof2[0]}.html">${p.proof2[1]}</a>.</p>`;
   const text = lines.join('\n') + `\n\nRelated work: https://itsnickbrown.github.io/projects/${p.proof[0]}.html`;
-  $('#send').href = 'mailto:nicholas.brown.umd@gmail.com?subject=' + encodeURIComponent('Your plan for our ' + t.label.toLowerCase() + ' team') + '&body=' + encodeURIComponent('Hi Nick,\n\nI built this plan on your site and want to talk about it:\n\n' + text + '\n\n');
-  window.__planText = text;
+  window.__planText = text; window.__planTeam = t.label.toLowerCase();
+  mail();
+}
+function mail() {
+  const n = $('#wName').value.trim(), c = $('#wCo').value.trim(), r = $('#wRole').value.trim();
+  const who = [n && 'Name: ' + n, c && 'Company: ' + c, r && 'Role: ' + r].filter(Boolean).join('\n');
+  const subj = 'Your plan for ' + (c ? c + "'s " : 'our ') + window.__planTeam + ' team';
+  const body = 'Hi Nick,\n\n' + (who ? who + '\n\n' : '') + 'I built this plan on your site and want to talk about it:\n\n' + window.__planText + '\n\n';
+  $('#send').href = 'mailto:nicholas.brown.umd@gmail.com?subject=' + encodeURIComponent(subj) + '&body=' + encodeURIComponent(body);
 }
 ['#team', '#pain', '#mode'].forEach(s => $(s).onchange = plan);
+['#wName', '#wCo', '#wRole'].forEach(s => $(s).oninput = mail);
+$('#sendOpen').onclick = () => { $('#who').hidden = false; $('#wName').focus(); };
+$('#whoCancel').onclick = () => { $('#who').hidden = true; };
 $('#copy').onclick = async () => { try { await navigator.clipboard.writeText(window.__planText); $('#copy').textContent = 'Copied'; } catch (e) { $('#copy').textContent = 'Select and copy the plan above'; } setTimeout(() => $('#copy').textContent = 'Copy this plan', 2000); };
 plan();
 </script></body></html>
