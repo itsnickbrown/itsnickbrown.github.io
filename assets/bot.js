@@ -7,7 +7,7 @@
 
   const KB = [
     {k: 'who nick about background summary yourself intro introduce experience career', a: () =>
-      `Nick Brown is a channel manager whose career runs through IT, compliance, contracts, distribution and channel sales. He most recently ran the long-tail reseller book for a network test and security tools vendor that sells only through distribution. Before that he was a vendor manager and strategic planner at a distributor, so he has worked both sides of the vendor and distributor relationship. This site shows the AI and data work he built in that role.`},
+      `Nick Brown is a channel manager whose career runs through IT, compliance, contracts, distribution and channel sales. He most recently managed about 1,600 smaller reseller partners for a network test and security tools vendor that sells only through distribution. Before that he was a vendor manager and strategic planner at a distributor, so he has worked both sides of the vendor and distributor relationship. This site shows the AI and data work he built in that role.`},
     {k: 'ai claude how use llm tools approach workflow pair program prompt', a: () =>
       `Nick uses Claude as a working partner. He writes the rules and definitions, Claude helps write the code, and he checks every number against the source. He also built 11+ reusable Claude skills for recurring work (POS analysis, partner vetting, account plans, weekly reports) and a context file so every session starts with his accounts, channel model and writing rules. See ${L('projects/claude-skills.html', 'Claude skills and AI workflow')}.`},
     {k: 'python code scripts programming language stack tech built', a: () =>
