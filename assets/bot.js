@@ -28,8 +28,8 @@
       `Custom skills include pos-analysis, partner-vetting, account-planning, weekly-activity-report, escalation-email, contact-finder, cold-email, copy-editing and sales-enablement, plus a branded slide skill for QBR decks. Each one encodes how he actually does the task, so the output starts close to done. ${L('projects/claude-skills.html', 'See the skills')}.`},
     {k: 'vetting partner application approve decline hold inbound reseller qualify', a: () =>
       `His partner vetting rule: never approve on self-reported answers. Verify distributor activity first, ask open questions, flag competing lines and coverage gaps, then recommend approve, hold or decline in one line. ${L('projects/claude-skills.html#vetting', 'Try the vetting demo')}.`},
-    {k: 'offer builder salon color sales tool configurator order erp sap side project', a: () =>
-      `The Offer Builder is a side project for a salon color sales rep. The rep walks a new salon through each product line, and the tool maps their picks to promo order codes, sizes one shared starter kit by total units, and produces copy-paste lines for ERP entry. ${L('projects/offer-builder.html', 'Read it')} or ${L('demos/offer-builder.html', 'try it')}.`},
+    {k: 'offer builder salon color sales tool configurator order erp sap side project consulting consult freelance', a: () =>
+      `The Offer Builder is consulting work for a salon color sales rep. The rep walks a new salon through each product line, and the tool maps their picks to promo order codes, sizes one shared starter kit by total units, and produces copy-paste lines for ERP entry. ${L('projects/offer-builder.html', 'Read it')} or ${L('demos/offer-builder.html', 'try it')}.`},
     {k: 'real data confidential fake synthetic masked privacy names numbers', a: () =>
       `Everything in the demos is synthetic. Partner names, end users, invoices and dollars were generated to match the shape of the real ledger, then run through the same code. The ${L('code/make_synthetic_ledger.py', 'generator script')} is public.`},
     {k: 'this site bot chatbot how built work you are', a: () =>
