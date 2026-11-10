@@ -32,9 +32,18 @@
   .num{text-align:right;font-variant-numeric:tabular-nums}
   .wrap{overflow-x:auto}
   @media(max-width:800px){.charts{grid-template-columns:1fr}}
+
+  .rotate-note{display:none}
+  @media (max-width:760px) and (orientation:portrait){
+    .rotate-note{display:flex;position:sticky;top:0;z-index:40;gap:10px;align-items:center;justify-content:space-between;background:#1d1d1f;color:#f5f5f7;font-size:13px;line-height:1.35;padding:10px 14px}
+    .rotate-note button{flex:none;border:0;background:#0071e3;color:#fff;border-radius:999px;padding:6px 12px;font:inherit;font-size:12px}
+    .rotate-note.hide{display:none}
+    .header{position:static}
+  }
 </style>
 </head>
 <body>
+<div class="rotate-note" id="rotateNote"><span>&#x21bb; Turn your phone sideways to read the charts and tables. Tables also scroll left and right.</span><button type="button" onclick="this.parentNode.classList.add('hide')">Got it</button></div>
 <div class="header">
   <h1><a href="../index.html#projects">&larr; Portfolio</a> &nbsp; Reseller Daily Tracker</h1>
   <div class="meta" id="meta"></div>

@@ -71,9 +71,19 @@
   .notes{margin:0 24px 32px;font-size:11px;color:#64748b;line-height:1.7}
   .notes b{color:#475569}
   @media(max-width:900px){.charts,.glance,.dgrid{grid-template-columns:1fr}.header{position:static}}
+
+  .rotate-note{display:none}
+  @media (max-width:760px) and (orientation:portrait){
+    .rotate-note{display:flex;position:sticky;top:0;z-index:40;gap:10px;align-items:center;justify-content:space-between;background:#1d1d1f;color:#f5f5f7;font-size:13px;line-height:1.35;padding:10px 14px}
+    .rotate-note button{flex:none;border:0;background:#0071e3;color:#fff;border-radius:999px;padding:6px 12px;font:inherit;font-size:12px}
+    .rotate-note.hide{display:none}
+    .header{position:static}
+  }
+  @media (max-width:760px){.controls{flex-wrap:wrap}.controls .chip{white-space:nowrap}.controls select{max-width:100%}.kpis{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
+<div class="rotate-note" id="rotateNote"><span>&#x21bb; Turn your phone sideways to read the charts and tables. Tables also scroll left and right.</span><button type="button" onclick="this.parentNode.classList.add('hide')">Got it</button></div>
 <div class="header">
   <div>
     <h1><a href="../index.html#projects" style="color:#64748b;text-decoration:none;font-weight:400">&larr; Portfolio</a> &nbsp; Reseller <span>Partner Insights</span></h1>
