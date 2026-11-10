@@ -78,8 +78,8 @@ section > h2{font-size:48px;font-weight:700;letter-spacing:-.03em;line-height:1.
 
 /* how I use AI */
 .how{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
-.how div{background:var(--card);border-radius:var(--r);padding:36px 32px;box-shadow:var(--shadow)}
-.how .num{font-size:15px;font-weight:600;color:var(--accent-ink);margin-bottom:10px}
+.how > div{background:var(--card);border-radius:var(--r);padding:36px 32px;box-shadow:var(--shadow)}
+.how .num{font-size:15px;font-weight:600;color:var(--accent-ink);margin-bottom:10px;background:none;box-shadow:none;padding:0;border-radius:0}
 .how h3{font-size:24px;font-weight:700;letter-spacing:-.02em;margin-bottom:8px}
 .how p{font-size:17px;color:var(--muted)}
 
