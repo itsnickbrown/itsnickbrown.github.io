@@ -4,11 +4,12 @@
 <meta property="og:title" content="Work with me | Nick Brown"><meta property="og:description" content="What Nick Brown would bring to your team, how he&#x27;d learn your business, and a plan you can shape to your needs.">
 <meta property="og:image" content="https://itsnickbrown.github.io/assets/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="627">
 <meta property="og:url" content="https://itsnickbrown.github.io/"><meta name="twitter:card" content="summary_large_image">
-<link rel="stylesheet" href="assets/site.css?v=db5896f9"></head><body><nav class="nav"><div class="in"><a class="brand" href="index.html" style="text-decoration:none">Nick Brown</a>
+<link rel="stylesheet" href="assets/site.css?v=f0b31ae7"></head><body><nav class="nav"><div class="in"><a class="brand" href="index.html" style="text-decoration:none">Nick Brown</a>
 <div class="links"><a href="index.html#projects">Projects</a><a href="work.html">Work with me</a><a href="index.html#how">How I use AI</a><a href="resume.html">Resume</a><a class="btn primary" style="padding:6px 14px;font-size:14px;color:#fff" href="index.html#contact">Get in touch</a></div></div></nav>
 <main class="wrap">
 <header class="hero"><div class="eyebrow">Work with me</div>
-<h1>What I'd do for your team.</h1>
+<h1 id="heroTitle">What I'd do for your team.</h1>
+<p class="personal" id="personal" hidden></p>
 <p>Most teams have the same problem in a different shape: work that repeats, data nobody fully trusts, and tools people don't use. My job is to find your version of it, fix the part that matters most, and leave behind something your team can run without me.</p>
 <div class="cta"><a class="btn primary" href="#shape">Shape a plan for your team</a><a class="btn" href="#contact">Get in touch</a></div></header>
 
@@ -106,6 +107,20 @@ const $ = s => document.querySelector(s);
 function fill(sel, obj) { $(sel).innerHTML = Object.entries(obj).map(([k, v]) => `<option value="${k}">${v.label}</option>`).join(''); }
 fill('#team', TEAMS); fill('#pain', PAINS); fill('#mode', MODE);
 $('#pain').value = 'adoption';
+// Personal links: work.html?co=Acme&team=channel&pain=trust&mode=project&role=Channel%20Manager
+const QS = new URLSearchParams(location.search);
+const CO = (QS.get('co') || '').trim().slice(0, 60);
+if (TEAMS[QS.get('team')]) $('#team').value = QS.get('team');
+if (PAINS[QS.get('pain')]) $('#pain').value = QS.get('pain');
+if (MODE[QS.get('mode')]) $('#mode').value = QS.get('mode');
+if (CO) {
+  $('#wCo').value = CO;
+  const safe = CO.replace(/[<>&"]/g, '');
+  document.title = 'A plan for ' + safe + ' | Nick Brown';
+  $('#heroTitle').textContent = 'What I\'d do for ' + safe + '.';
+  $('#personal').hidden = false;
+  $('#personal').textContent = 'This page was set up for ' + safe + (QS.get('role') ? ', for the ' + QS.get('role').slice(0, 80).replace(/[<>&"]/g, '') + ' role' : '') + '. The plan below is a starting point. Change the options to see other versions.';
+}
 function plan() {
   const t = TEAMS[$('#team').value], p = PAINS[$('#pain').value], m = MODE[$('#mode').value];
   const lines = [
