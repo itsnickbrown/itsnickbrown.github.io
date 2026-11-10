@@ -6,6 +6,8 @@
   const L = (path, text) => `<a href="${BASE}${path}">${text}</a>`;
 
   const KB = [
+    {k: 'hire hiring help team value offer engagement plan 90 days first bring consult project approach business understand fit work with', a: () =>
+      `Nick starts by learning the business: one-on-ones with the people doing the work, mapping recurring tasks, and tracing numbers people argue about. Then he ships two quick wins, builds with the team, trains them and measures the result. The ${L('work.html', 'Work with me page')} has his 90-day plan and a tool that shapes a plan for your team.`},
 
     {k: 'work working job current employer company now latest most recent role title netally channel account manager', a: () =>
       `Nick was most recently a Channel Account Manager at NetAlly, a maker of network test and cybersecurity tools sold only through two-tier distribution. He managed national distributors (Anixter/WESCO, Ingram Micro, TD SYNNEX) and about 1,600 smaller resellers, and finished at 166% of a $450K monthly quota. He's now looking for his next role. Full details are on his ${L('resume.html', 'resume')}.`},
@@ -91,7 +93,7 @@
     return `I don't have a good answer for that one. Try asking where Nick worked, where he went to school, how he uses AI, his results, or whether the demo data is real.`;
   }
 
-  const SUG = ['Where did Nick work?', 'How does Nick use AI?', 'What results did he get?', 'Where did he go to college?', 'Is this real data?'];
+  const SUG = ['What would Nick do for my team?', 'How does Nick use AI?', 'Where did Nick work?', 'What results did he get?', 'Is this real data?'];
   const html = `<button id="botBtn" aria-controls="bot" aria-expanded="false">Ask about my work</button>
   <div id="bot" role="dialog" aria-label="Ask about my work">
     <div class="top"><div><b>Ask about Nick's work</b><span>Runs in your browser. Answers come from this site.</span></div><button id="botX" aria-label="Close">&times;</button></div>
