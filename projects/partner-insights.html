@@ -1,21 +1,21 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Partner Insights page | Nick Brown</title><meta name="description" content="One page that answers who is buying, who is new, who came back and who went quiet, for any month. Every row drills down to end users, products and orders.">
+<title>Partner Insights page | Nick Brown</title><meta name="description" content="One page that shows who is buying, who is new, who came back, and who went quiet in any month. Every row drills down to end users, products, and orders.">
 <meta property="og:type" content="website"><meta property="og:site_name" content="Nick Brown">
-<meta property="og:title" content="Partner Insights page | Nick Brown"><meta property="og:description" content="One page that answers who is buying, who is new, who came back and who went quiet, for any month. Every row drills down to end users, products and orders.">
+<meta property="og:title" content="Partner Insights page | Nick Brown"><meta property="og:description" content="One page that shows who is buying, who is new, who came back, and who went quiet in any month. Every row drills down to end users, products, and orders.">
 <meta property="og:image" content="https://itsnickbrown.github.io/assets/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="627">
 <meta property="og:url" content="https://itsnickbrown.github.io/"><meta name="twitter:card" content="summary_large_image">
 <link rel="stylesheet" href="../assets/site.css?v=00a6a31c"></head><body><nav class="nav"><div class="in"><a class="brand" href="../index.html" style="text-decoration:none">Nick Brown</a>
 <div class="links"><a href="../index.html#projects">Projects</a><a href="../work.html">Work with me</a><a href="../index.html#how">How I use AI</a><a href="../resume.html">Resume</a><a class="btn primary" style="padding:6px 14px;font-size:14px;color:#fff" href="../index.html#contact">Get in touch</a></div></div></nav>
 <main class="wrap">
 <div class="crumb"><a href="../index.html#projects">&lsaquo; All projects</a></div>
-<div class="ph"><div class="eyebrow">Dashboard</div><h1>Partner Insights page</h1><p>One page that answers who is buying, who is new, who came back and who went quiet, for any month. Every row drills down to end users, products and orders.</p>
+<div class="ph"><div class="eyebrow">Dashboard</div><h1>Partner Insights page</h1><p>One page that shows who is buying, who is new, who came back, and who went quiet in any month. Every row drills down to end users, products, and orders.</p>
 <div class="tags"><span class="tag">Python</span><span class="tag">Dashboard</span><span class="tag">POS data</span><span class="tag">Claude</span></div><div class="cta"><a class="btn primary" href="../demos/partner-insights.html">Open the live demo</a><a class="btn" href="#" data-ask="Partner Insights page">Ask the bot about this</a></div></div>
 <div class="cols"><article class="body">
 <h2>The problem</h2>
 <p>Leadership kept asking the same questions. How many partners bought this month? How many are new? Who used to buy and stopped? Each answer meant pulling the POS file into a spreadsheet and building a pivot on the fly, often during the call.</p>
-<p>The small resellers made it harder. Two thirds of the active partners bought in a single month all year. A partner is mostly on or off, not up or down, so the usual month-over-month view showed noise.</p>
+<p>The small resellers made it harder. Two-thirds of active partners bought in only one month all year. A partner is mostly on or off, not up or down, so the usual month-over-month view showed noise.</p>
 <h2>What I built</h2>
-<p>A Python script reads the POS ledger and writes one self-contained HTML page. It groups every row by partner and month, then embeds that history as JSON. The browser does the month math, so the month picker re-anchors every card, chart and table without a rebuild.</p>
+<p>A Python script reads the POS ledger and writes one self-contained HTML page. It groups every row by partner and month, then embeds that history as JSON. The browser does the month math, so the month picker re-anchors every card, chart, and table without a rebuild.</p>
 <p>The definitions were the real work. I wrote them down first and made the code follow them:</p>
 <ul>
 <li><b>Repeat</b>: bought this month and in at least one of the 12 months before.</li>
@@ -24,10 +24,10 @@
 <li><b>Gone quiet</b>: bought in 2 or more of the 12 months ending 3 months ago, nothing since.</li>
 <li><b>Growing</b> and <b>Declining</b>: trailing 12 vs prior 12, with a 5% flat band.</li>
 </ul>
-<p>The three follow-up buckets (Stopped, Gone quiet, Declining) never overlap. Each partner lands in one, checked in that order. That mattered because a BDR worked straight from those lists: 336 partners in three waves, starting with webinar clickers.</p>
+<p>The three follow-up buckets (Stopped, Gone quiet, Declining) never overlap. Each partner lands in one, checked in that order. That mattered because a BDR worked straight from those lists. That was 336 partners in three waves, starting with webinar clickers.</p>
 <p>One distributor reports the end user in the reseller field. The script drops partners seen only through that distributor, so customers don't get counted as resellers.</p>
 <h2>How AI fit in</h2>
-<p>I built this with Claude as a pair programmer. I owned the definitions, the edge cases and the checks. Every number on the page was checked against the ledger before anyone saw it.</p>
+<p>I built this with Claude's help. I owned the definitions, the edge cases, and the checks. Every number on the page was checked against the ledger before anyone saw it.</p>
 <h2>The code</h2>
 <p>The core of the month logic, from the page itself:</p>
 <pre><code>function ptype(p, i) {
@@ -44,4 +44,4 @@ const isQuiet = (p, i) =&gt; cnt(p, i - 14, i - 3) &gt;= 2 &amp;&amp; cnt(p, i -
 <div class="next"><a href="offer-builder.html">&lsaquo; Salon offer builder</a><a href="daily-tracker.html">Daily POS tracker and month-end projection &rsaquo;</a></div>
 </main><footer><div class="wrap">Built by Nick Brown with Claude. All demo data is synthetic. Hosted free on GitHub Pages.</div></footer>
 <script data-goatcounter="https://itsnickbrown.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
-<script src="../assets/resume-index.js?v=b0f16a5a"></script><script src="../assets/bot.js?v=fca6b9df" data-base="../"></script></body></html>
+<script src="../assets/resume-index.js?v=b0f16a5a"></script><script src="../assets/bot.js?v=4e2f57f0" data-base="../"></script></body></html>
