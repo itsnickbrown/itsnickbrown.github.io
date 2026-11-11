@@ -232,3 +232,5 @@ p.lead.sub{font-size:17px;margin-top:-26px}
 @media(max-width:820px){.hero h1{font-size:36px}}
 
 .hero p + p{margin-top:14px}
+
+.hero p b{color:#1d1d1f;font-weight:600}
