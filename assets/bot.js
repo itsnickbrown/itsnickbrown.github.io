@@ -6,13 +6,13 @@
   const L = (path, text) => `<a href="${BASE}${path}">${text}</a>`;
 
   const KB = [
-    {k: 'hire hiring help team value offer engagement plan 90 days first bring consult project approach business understand fit work with', a: () =>
+    {k: 'hire hiring help team value offer engagement plan 90 days first bring approach business understand fit with what would do for my', a: () =>
       `Nick starts by learning the business: one-on-ones with the people doing the work, mapping recurring tasks, and tracing numbers people argue about. Then he ships two quick wins, builds with the team, trains them, and measures the result. The ${L('work.html', 'Work with me page')} has his 90-day plan and a tool that shapes a plan for your team.`},
 
     {k: 'work working job current employer company now latest most recent role title netally channel account manager', a: () =>
       `Nick was most recently a Channel Account Manager at NetAlly, a network diagnostics company that sells through two-tier distribution. He managed national distributors (Anixter/WESCO, Ingram Micro, TD SYNNEX) and over 1,600 smaller resellers, and finished at 166% of a $450K monthly quota. He's now looking for his next role. Full details are on his ${L('resume.html', 'resume')}.`},
-    {k: 'previous past history career before tessco hopkins johns jobs worked employers companies timeline', a: () =>
-      `Before NetAlly, Nick was a strategic planner and vendor manager at Tessco Technologies, a distributor of wireless and network infrastructure products. He ran a $53M supplier portfolio and grew it by $20M a year. He started his career at Johns Hopkins University and Johns Hopkins Hospital in contracts, compliance, and IT. See his ${L('resume.html', 'resume')}.`},
+    {k: 'previous past history career before jobs worked employers companies timeline where', a: () =>
+      `Nick was most recently a Channel Account Manager at NetAlly, managing distributors and over 1,600 resellers. Before that, he was a strategic planner and vendor manager at Tessco Technologies, a distributor of wireless and network infrastructure products. He ran a $53M supplier portfolio and grew it by $20M a year. He started his career at Johns Hopkins University and Johns Hopkins Hospital in contracts, compliance, and IT. See his ${L('resume.html', 'resume')}.`},
     {k: 'college university school degree education study studied graduate major umd maryland bachelor', a: () =>
       `Nick has a bachelor's degree in Environmental Science from University of Maryland University College.`},
     {k: 'live lives living located location based city state timonium area hometown', a: () =>
@@ -55,6 +55,30 @@
       `He ran a six-issue plain-text partner newsletter (opens 23 to 28%, one short subject hit 67%) and a product launch newsletter that reached about 1,030 people. He also found the old list reached only 30 of 450 buying partners with a 23% hard bounce rate, and rebuilt it from the ledger.`},
     {k: 'excel powerpoint deck qbr report heat map xlsx pptx', a: () =>
       `Alongside the web pages he built Excel deliverables from POS data (YoY reports, monthly heat maps with sparklines, product deep-dives), an Excel dashboard with red/yellow/green partner status, and QBR decks generated from code.`},
+    {k: 'remote hybrid onsite office relocate relocation commute in person travel', a: () =>
+      `Nick works remote today and is looking for remote roles. He is also open to hybrid work near Baltimore for the right role. For travel needs on a specific role, ask him directly.`},
+    {k: 'available availability consulting consultant freelance contract contractor part time project start', a: () =>
+      `Yes. Nick is open to consulting and freelance projects as well as full-time roles. The salon offer builder on this site was a consulting project. ${L('work.html', 'Shape a plan for your team')} or email him to talk.`},
+    {k: 'manage management lead leader leadership people direct reports supervise team led', a: () =>
+      `Nick's roles have been individual contributor roles with a lot of leading across teams. He trained a national distributor's full sales team, ran supplier and distributor QBRs, escalated to a partner's VP and CRO, and built the call lists a BDR worked from for 336 partners.`},
+    {k: 'biggest accomplishment proud best achievement highlight', a: () =>
+      `Two stand out. At NetAlly he finished at 166% of a $450K monthly quota. At Tessco he grew a $53M supplier portfolio by $20M a year. On the data side, he caught a month in the sales ledger reading 93% high before it reached leadership.`},
+    {k: 'train training trained teach teaching taught enablement workshop', a: () =>
+      `Training runs through his whole career. At Johns Hopkins he trained people on technology. At NetAlly he trained a national distributor's full sales team for a utilities and rail push and ran partner enablement for two product launches. He also builds AI workflows written down so a whole team can use them.`},
+    {k: 'distributor distributors distribution two tier anixter wesco ingram synnex', a: () =>
+      `Nick has worked both sides of distribution. At Tessco, a distributor, he managed a $53M supplier portfolio. At NetAlly, a vendor, he managed national distributors (Anixter/WESCO, Ingram Micro, TD SYNNEX), ran their QBRs, and used their POS data to find growth and problems early.`},
+    {k: 'certification certifications certified certificate license', a: () =>
+      `No certifications are listed on his resume. Email Nick if a specific one matters for your role.`},
+    {k: 'salary pay compensation rate rates cost price expect expectation', a: () =>
+      `Nick prefers to talk about compensation and rates directly. Email him at <a href="mailto:nicholas.brown.umd@gmail.com">nicholas.brown.umd@gmail.com</a>.`},
+    {k: 'fun hobby hobbies personal free time family interests outside', a: () =>
+      `This site sticks to work. Ask Nick when you talk to him.`},
+    {k: 'how many partners resellers book size accounts managed manage', a: () =>
+      `Nick managed national distributors and over 1,600 smaller reseller partners at NetAlly.`},
+    {k: 'why should hire strengths stand out different unique', a: () =>
+      `He has worked both sides of the channel, as a vendor and as a distributor, and he builds his own data tools instead of waiting for them. His work here shows the pattern: find what's wrong in the numbers, fix it, and leave a tool the team keeps using. ${L('work.html', 'See what he would do for your team')}.`},
+    {k: 'how long years experience tenure dates when started', a: () =>
+      `His career runs from Johns Hopkins (contracts, compliance, and IT) to Tessco (vendor management) to NetAlly (channel). The ${L('resume.html', 'resume')} has the full history, and Nick can share dates directly.`},
   ];
   const SYN = {aio: 'ai', ml: 'ai', gpt: 'ai', chatgpt: 'ai', anthropic: 'claude', py: 'python', viz: 'dashboard',
     chart: 'dashboard', charts: 'dashboard', report: 'dashboard', clean: 'clean', cleanup: 'clean', duplicates: 'duplicate',
@@ -62,6 +86,7 @@
     hiring: 'hire', job: 'job', jobs: 'job', fake: 'fake', real: 'real', privacy: 'privacy', hello: 'intro', hi: 'intro', hey: 'intro'};
   const STOP = new Set('the a an and or of to in on for is are was were do does did how what why who with my your his he it this that you me can i about tell show any'.split(' '));
   const toks = s => s.toLowerCase().replace(/[^a-z0-9 ]/g, ' ').split(/\s+/).filter(w => w && !STOP.has(w)).map(w => SYN[w] || w).map(w => w.length > 4 ? w.replace(/(ing|ed|es|s)$/, '') : w);
+  const LOW = new Set(['nick', 'work', 'where', 'people', 'know', 'have', 'get', 'good', 'experience', 'brown', 'open']);
   const IDX = KB.map(e => new Set(toks(e.k)));
 
   // Fallback: search the resume line by line and quote the best match.
@@ -71,26 +96,33 @@
     R.forEach(r => {
       const words = new Set(toks(r.t + ' ' + r.o + ' ' + r.s));
       let sc = r.s === 'Core Competencies' ? -1 : 0;
-      t.forEach(w => { if (words.has(w)) sc += w.length > 4 ? 2 : 1; });
+      t.forEach(w => { if (words.has(w)) sc += LOW.has(w) ? 0.5 : (w.length > 4 ? 2 : 1); });
       if (sc > top) { top = sc; best = r; }
     });
     if (!best || top < 2) return null;
     const where = best.o ? `at ${best.o}` : (best.s ? `under ${best.s}` : '');
     return {score: top, text: `From Nick's resume${where ? ' (' + where + ')' : ''}: ${best.t} ${L('resume.html', 'See the full resume')}.`};
   }
+  const ORG = [
+    [/hopkins|jhu|jhh/i, () => `Nick started his career at Johns Hopkins University and Johns Hopkins Hospital in Baltimore. He was a contracts specialist, negotiating 30+ vendor contracts and cutting costs 10%. He was a credentialing and compliance coordinator, credentialing 218 providers during COVID-19. And he was an IT and multimedia specialist, cutting annual technology spend 15%. ${L('resume.html', 'See the full resume')}.`],
+    [/tessco/i, () => `At Tessco Technologies, a distributor of wireless and network infrastructure products, Nick was a strategic planner and vendor manager. He managed a $53M supplier portfolio, grew it by $20M a year, led new product introductions that drove 125% portfolio growth, and cut product launch effort 40%. ${L('resume.html', 'See the full resume')}.`],
+    [/\b(umd|umuc|university of maryland)\b/i, () => `Nick has a bachelor's degree in Environmental Science from University of Maryland University College.`],
+  ];
   function answer(q) {
+    if (/how long|what year|when did|dates/i.test(q)) return KB.find(e => e.k.startsWith('how long')).a();
+    for (const [re, f] of ORG) if (re.test(q)) return f();
     const t = toks(q);
     let best = -1, score = 0;
     IDX.forEach((set, i) => {
       let s = 0;
-      t.forEach(w => { const wt = w.length > 3 ? 2 : 1; if (set.has(w)) s += wt; else if (w.length > 3) for (const k of set) if (k.length > 3 && (k.startsWith(w) || w.startsWith(k))) { s += 1; break; } });
+      t.forEach(w => { const wt = LOW.has(w) ? 0.5 : (w.length > 3 ? 2 : 1); if (set.has(w)) s += wt; else if (w.length > 3) for (const k of set) if (k.length > 3 && (k.startsWith(w) || w.startsWith(k))) { s += 1; break; } });
       if (s > score) { score = s; best = i; }
     });
     const hit = searchResume(t);
     if (hit && hit.score >= score + 2) return hit.text;
-    if (best >= 0 && score >= 2) return KB[best].a();
+    if (best >= 0 && (score >= 1 || t.every(w => LOW.has(w)))) return KB[best].a();
     if (hit) return hit.text;
-    return `I don't have a good answer for that one. Try asking where Nick worked, where he went to school, how he uses AI, his results, or whether the demo data is real.`;
+    return `I'm a simple search bot, so I don't have an answer for that one. Try asking about his jobs, results, or how he uses AI. Or email Nick at <a href="mailto:nicholas.brown.umd@gmail.com">nicholas.brown.umd@gmail.com</a>.`;
   }
 
   const SUG = ['What would Nick do for my team?', 'How does Nick use AI?', 'Where did Nick work?', 'What results did he get?', 'Is this real data?'];

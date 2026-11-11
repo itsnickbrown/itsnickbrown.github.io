@@ -9,7 +9,7 @@
 <main class="wrap">
 <div class="crumb"><a href="../index.html#projects">&lsaquo; All projects</a></div>
 <div class="ph"><div class="eyebrow">Data quality</div><h1>Finding and fixing bad POS data</h1><p>The ledger said one month was up 93%. It wasn't. Here's how I traced double counting, split names, and end users hiding in the reseller list, then fixed them without deleting real revenue.</p>
-<div class="tags"><span class="tag">Python</span><span class="tag">Data quality</span><span class="tag">POS data</span></div><div class="cta"><a class="btn" href="#" data-ask="Finding and fixing bad POS data">Ask the bot about this</a></div></div>
+<div class="tags"><span class="tag">Python</span><span class="tag">Data quality</span><span class="tag">POS data</span></div><div class="cta"><a class="btn" href="#" data-ask="Finding and fixing bad POS data">Ask about this project</a></div></div>
 <div class="cols"><article class="body">
 <h2>What went wrong</h2>
 <p>Distributor files are cumulative, so each one repeats the month so far. The ledger was supposed to skip lines it already had. It didn't. The line ID was built from raw Excel values, and the data types changed between exports. Line 3 in one file was 3.0 in the next. Same sale, new ID, counted again. One month read 93% high.</p>
@@ -44,7 +44,7 @@
 <div class="next"><a href="daily-tracker.html">&lsaquo; Daily POS tracker and month-end projection</a><a href="segmentation.html">Recency segments and honest attribution &rsaquo;</a></div>
 </main><footer><div class="wrap">Built by Nick Brown with Claude. All demo data is synthetic. Hosted free on GitHub Pages.</div></footer>
 <script data-goatcounter="https://itsnickbrown.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
-<script src="../assets/resume-index.js?v=b0f16a5a"></script><script src="../assets/bot.js?v=4e2f57f0" data-base="../"></script><script>
+<script src="../assets/resume-index.js?v=b0f16a5a"></script><script src="../assets/bot.js?v=8fcae8a6" data-base="../"></script><script>
 const ROWS=[['day_0914.xlsx','7001842',3,'LT-100',2650],['day_0914.xlsx','7001842',4,'SUP-1YS-LT',420],['day_0915.xlsx','7001842','3.0','LT-100',2650],['day_0915.xlsx','7001842','4.0','SUP-1YS-LT',420],['day_0915.xlsx','7001907',1,'WA-PRO-KIT',4236],['day_0916.xlsx','7001842',3,'LT-100',2650],['day_0916.xlsx','7001907','1.0','WA-PRO-KIT',4236],['day_0916.xlsx','7002011',1,'NA-300',9559]];
 const norm=v=>{const f=parseFloat(v);return isNaN(f)?String(v).toUpperCase():String(f===Math.floor(f)?Math.floor(f):f)};
 function dd(){const m=document.querySelector('input[name=idm]:checked').value,seen=new Set();let kept=0,cut=0,body='';
