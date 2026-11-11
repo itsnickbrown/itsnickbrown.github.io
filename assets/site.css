@@ -226,3 +226,7 @@ p code,li code,.out code{background:#f5f5f7;padding:1px 6px;border-radius:5px;fo
 .hero p.footnote{font-size:13px;color:var(--soft);margin-top:18px}
 
 p.lead.sub{font-size:17px;margin-top:-26px}
+
+.hero h1 em{font-style:normal;color:var(--accent)}
+.hero p.tagline{color:var(--ink,#1d1d1f);font-weight:500;margin-bottom:18px}
+@media(max-width:820px){.hero h1{font-size:36px}}
