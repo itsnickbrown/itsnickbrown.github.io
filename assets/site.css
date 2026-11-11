@@ -222,3 +222,5 @@ p code,li code,.out code{background:#f5f5f7;padding:1px 6px;border-radius:5px;fo
 .body,.demo{min-width:0;overflow-wrap:anywhere}
 .demo{overflow-x:auto}
 @media(max-width:820px){.demo{padding:18px 14px}.demo table{display:block;overflow-x:auto;white-space:nowrap}.body img,.body iframe{max-width:100%}}
+
+.hero p.footnote{font-size:13px;color:var(--soft);margin-top:18px}
