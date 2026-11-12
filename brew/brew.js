@@ -6,7 +6,7 @@
    If a product has no link there and AMAZON_TAG is set, it falls back to an
    Amazon search link with your tag. With neither, it links to a plain Amazon search. */
 
-const AMAZON_TAG = "";          // e.g. "nickbrew-20" once Amazon Associates approves you
+const AMAZON_TAG = "nickbrewguide-20";
 const LINKS = {
   // "fellow-aiden": "https://fellow.pxf.io/....",   // from Impact
   // "baratza-encore-esp": "https://baratza.pxf.io/....",
