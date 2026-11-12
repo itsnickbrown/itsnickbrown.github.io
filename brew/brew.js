@@ -453,6 +453,13 @@ if (typeof document !== "undefined") (function () {
     const n = e.target.closest("[data-note]");
     if (n) { const k = n.dataset.note; s.notes = s.notes.includes(k) ? s.notes.filter(x => x !== k) : s.notes.concat(k).slice(-2); fillSelects(); render(); return; }
     if (e.target.id === "share") { navigator.clipboard && navigator.clipboard.writeText(location.href).then(() => { e.target.textContent = "Copied"; setTimeout(() => e.target.textContent = "Copy link", 1500); }); count("share-" + MODE); return; }
+    if (e.target.id === "fbSend") {
+      const type = $("fbType").value, txt = $("fbText").value.trim();
+      const body = `${txt || "(no details)"}\n\nPage: ${location.href}\nGrinder: ${(GRINDERS[s.grinder] || {}).name}`;
+      count("feedback-" + MODE);
+      location.href = `mailto:nicholas.brown.umd@gmail.com?subject=${encodeURIComponent("Brew Guide: " + type)}&body=${encodeURIComponent(body)}`;
+      return;
+    }
     const g = e.target.closest("[data-gear]"); if (g) count("gear-" + g.dataset.gear + "-" + MODE);
   });
 
