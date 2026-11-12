@@ -1,42 +1,8 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name='impact-site-verification' value='c2a589a4-eed8-4c95-93e4-2103fb3a3cf9'><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fellow Aiden Profile Builder by Coffee | Brew Guide</title><meta name="description" content="Build a Fellow Aiden brew profile from your bag of coffee. Pick the origin, process and roast, then your grinder. Get temperature, ratio, bloom, pulses and a grind setting.">
-<link rel="canonical" href="https://itsnickbrown.github.io/brew/">
-<meta property="og:type" content="website"><meta property="og:site_name" content="Brew Guide">
-<meta property="og:title" content="Fellow Aiden Profile Builder by Coffee | Brew Guide"><meta property="og:description" content="Build a Fellow Aiden brew profile from your bag of coffee. Pick the origin, process and roast, then your grinder. Get temperature, ratio, bloom, pulses and a grind setting.">
-<meta property="og:url" content="https://itsnickbrown.github.io/brew/"><meta name="twitter:card" content="summary">
-<link rel="stylesheet" href="../assets/site.css?v=00a6a31c"><link rel="stylesheet" href="brew.css?v=4">
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Why start from the coffee and not the machine?", "acceptedAnswer": {"@type": "Answer", "text": "Fellow's presets are built around roast level. Two light roasts can need different settings. A washed Ethiopian wants hot water and lots of agitation to show its florals. A natural from the same farm muddles if you push it that hard. Starting from the origin and process gets you closer on the first brew."}}, {"@type": "Question", "name": "What if my grinder isn't listed?", "acceptedAnswer": {"@type": "Answer", "text": "Use the grinder closest to yours and treat the number as a direction. Most grinders work in the same order: lower is finer. If the cup is sour, go finer. If it's bitter, go coarser."}}, {"@type": "Question", "name": "Single serve or batch?", "acceptedAnswer": {"@type": "Answer", "text": "Single serve uses the cone basket and pulses matter. Batch uses the flat bottom basket and one pulse. Batch beds drain faster, so the grind is usually a step coarser on the dial and you adjust from taste."}}, {"@type": "Question", "name": "Why one change at a time?", "acceptedAnswer": {"@type": "Answer", "text": "If you change the grind and the temperature together and the cup gets better, you don't know which one did it. One change per brew gets you to a great cup faster."}}]}</script></head>
-<body data-mode="aiden"><nav class="nav"><div class="in"><a class="brand" href="index.html" style="text-decoration:none">Brew Guide<small>by Nick Brown</small></a>
-<div class="links"><a href="index.html" class="on">Fellow Aiden</a><a href="pour-over.html">Pour over</a><a href="espresso.html">Espresso</a></div></div></nav>
-<main class="wrap">
-<header class="ph"><div class="eyebrow">Brew Guide</div><h1>A Fellow Aiden profile for the coffee in your hand.</h1><p>Pick where the beans are from, how they were processed and how dark they&#x27;re roasted. Then pick your grinder. You get every Aiden setting plus a grind number to start from.</p></header>
-<div class="tool">
-<h2 class="sec">1. The coffee</h2>
-<div class="form">
-<label>Origin<select id="origin"></select></label>
-<label>Region<select id="region"></select></label>
-<label>Process<select id="process"></select></label>
-<label>Varietal<select id="varietal"></select></label>
-<label>Roast date<select id="age"></select></label>
-</div>
-<div class="row2"><div><div class="lbl">Roast level</div><div class="segmented"><button type="button" class="chip" data-roast="light">Light</button><button type="button" class="chip" data-roast="medium">Medium</button><button type="button" class="chip" data-roast="mediumdark">Medium dark</button><button type="button" class="chip" data-roast="dark">Dark</button></div></div></div>
-<div class="row2"><div><div class="lbl">What does the bag say? (optional)</div><div class="notes" id="notes"></div>
-<p class="hint">Pick the tasting notes on the bag. If you pick two, list the first one on the bag first. Leave it blank and the tool guesses from the origin and process.</p></div></div>
-<div class="divider"></div>
-<h2 class="sec">2. Your gear</h2>
-<div class="form"><label>Grinder<select id="grinder"></select></label><label>Brew size<select id="size"><option value="single">Single serve (cone)</option><option value="batch">Batch, 4 to 10 cups</option></select></label></div>
-</div>
-<div class="tool" id="result" aria-live="polite"></div>
-<div class="tool" id="gear"></div>
-<div class="tool fb" id="feedback"><div><h3>What's missing?</h3><p>Grinder or brewer not listed? Grind numbers off for yours? Tell me and I'll add or fix it.</p></div>
-<div class="fb-form"><select id="fbType"><option>Add a grinder</option><option>Add a brewer or method</option><option>Grind number is off</option><option>Recipe tasted off</option><option>Something else</option></select>
-<textarea id="fbText" rows="3" placeholder="For example: please add the 1Zpresso K-Ultra, or: on my Encore, 15 drains too fast for a V60"></textarea>
-<input id="fbEmail" type="email" placeholder="Email (optional, if you want a reply)">
-<button class="btn primary" type="button" id="fbSend">Send feedback</button><p class="hint" id="fbMsg">Your note comes straight to me, with a link to the recipe you were looking at.</p></div></div>
-
-<p class="disclose">Some gear and bean links are affiliate links. If you buy through them, I may earn a small commission at no cost to you. The recipes don't change based on what pays.</p>
-<div class="pages" style="margin-top:30px"><a href="pour-over.html"><b>Pour over</b><span>Choose the coffee, your dripper and your grinder.</span></a><a href="espresso.html"><b>Espresso</b><span>Pick the coffee and your grinder.</span></a></div>
-<section class="faq"><h2>Questions</h2><details><summary>Why start from the coffee and not the machine?</summary><p>Fellow&#x27;s presets are built around roast level. Two light roasts can need different settings. A washed Ethiopian wants hot water and lots of agitation to show its florals. A natural from the same farm muddles if you push it that hard. Starting from the origin and process gets you closer on the first brew.</p></details><details><summary>What if my grinder isn&#x27;t listed?</summary><p>Use the grinder closest to yours and treat the number as a direction. Most grinders work in the same order: lower is finer. If the cup is sour, go finer. If it&#x27;s bitter, go coarser.</p></details><details><summary>Single serve or batch?</summary><p>Single serve uses the cone basket and pulses matter. Batch uses the flat bottom basket and one pulse. Batch beds drain faster, so the grind is usually a step coarser on the dial and you adjust from taste.</p></details><details><summary>Why one change at a time?</summary><p>If you change the grind and the temperature together and the cup gets better, you don&#x27;t know which one did it. One change per brew gets you to a great cup faster.</p></details></section>
-</main><footer><div class="wrap">Built by <a href="../index.html">Nick Brown</a>. Grind settings come from each maker's own guide. Recipes are starting points, so taste and adjust.</div></footer>
-<script data-goatcounter="https://itsnickbrown.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
-<script src="brew.js?v=5"></script></body></html>
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<title>Brew Guide has moved</title>
+<link rel="canonical" href="https://brewguide.pages.dev/">
+<meta name="robots" content="noindex">
+<meta http-equiv="refresh" content="0; url=https://brewguide.pages.dev/">
+<script>location.replace("https://brewguide.pages.dev/"+location.hash)</script>
+</head><body><p>Brew Guide moved to <a href="https://brewguide.pages.dev/">https://brewguide.pages.dev/</a>.</p></body></html>
