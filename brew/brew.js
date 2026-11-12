@@ -454,10 +454,17 @@ if (typeof document !== "undefined") (function () {
     if (n) { const k = n.dataset.note; s.notes = s.notes.includes(k) ? s.notes.filter(x => x !== k) : s.notes.concat(k).slice(-2); fillSelects(); render(); return; }
     if (e.target.id === "share") { navigator.clipboard && navigator.clipboard.writeText(location.href).then(() => { e.target.textContent = "Copied"; setTimeout(() => e.target.textContent = "Copy link", 1500); }); count("share-" + MODE); return; }
     if (e.target.id === "fbSend") {
-      const type = $("fbType").value, txt = $("fbText").value.trim();
-      const body = `${txt || "(no details)"}\n\nPage: ${location.href}\nGrinder: ${(GRINDERS[s.grinder] || {}).name}`;
-      count("feedback-" + MODE);
-      location.href = `mailto:nicholas.brown.umd@gmail.com?subject=${encodeURIComponent("Brew Guide: " + type)}&body=${encodeURIComponent(body)}`;
+      const type = $("fbType").value, txt = $("fbText").value.trim(), email = $("fbEmail").value.trim();
+      if (!txt) { $("fbMsg").textContent = "Add a sentence or two so I know what to fix."; return; }
+      const fd = new URLSearchParams();
+      fd.append("entry.1687808053", type);
+      fd.append("entry.1263591643", `${txt}\n\nPage: ${location.href}\nGrinder: ${(GRINDERS[s.grinder] || {}).name}`);
+      if (email) fd.append("entry.1154471066", email);
+      e.target.disabled = true;
+      fetch("https://docs.google.com/forms/d/e/1FAIpQLSeex50dFUYQsEWL67ONnF-RorlF8U-y7OhAgSjEFBlQm_lEuw/formResponse", { method: "POST", mode: "no-cors", body: fd })
+        .then(() => { $("fbText").value = ""; $("fbMsg").textContent = "Thanks. Got it."; count("feedback-" + MODE); })
+        .catch(() => { $("fbMsg").innerHTML = 'That didn\'t send. <a href="https://docs.google.com/forms/d/e/1FAIpQLSeex50dFUYQsEWL67ONnF-RorlF8U-y7OhAgSjEFBlQm_lEuw/viewform" target="_blank" rel="noopener">Use the form instead</a>.'; })
+        .finally(() => { e.target.disabled = false; });
       return;
     }
     const g = e.target.closest("[data-gear]"); if (g) count("gear-" + g.dataset.gear + "-" + MODE);

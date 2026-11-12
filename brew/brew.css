@@ -58,6 +58,6 @@ table.fix td{padding:9px 12px;border-top:1px solid #e6e6ea}
 .fb{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:24px;align-items:start}
 .fb h3{font-size:24px;font-weight:700;letter-spacing:-.02em;margin-bottom:6px}.fb p{color:var(--muted);font-size:16px}
 .fb-form{display:flex;flex-direction:column;gap:10px}
-.fb-form select,.fb-form textarea{font:inherit;font-size:16px;padding:11px 12px;border:1px solid var(--line);border-radius:12px;background:#fff;width:100%;color:var(--ink)}
+.fb-form select,.fb-form textarea,.fb-form input{font:inherit;font-size:16px;padding:11px 12px;border:1px solid var(--line);border-radius:12px;background:#fff;width:100%;color:var(--ink)}
 .fb-form .btn{align-self:flex-start}
 @media(max-width:860px){.fb{grid-template-columns:1fr}}
