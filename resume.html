@@ -4,51 +4,159 @@
 <meta property="og:title" content="Resume | Nick Brown"><meta property="og:description" content="Resume of Nick Brown, channel sales and partner programs">
 <meta property="og:image" content="https://itsnickbrown.github.io/assets/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="627">
 <meta property="og:url" content="https://itsnickbrown.github.io/"><meta name="twitter:card" content="summary_large_image">
-<link rel="stylesheet" href="assets/site.css?v=00a6a31c"></head><body><nav class="nav"><div class="in"><a class="brand" href="index.html" style="text-decoration:none">Nick Brown</a>
+<link rel="stylesheet" href="assets/site.css?v=00a6a31c">
+<style>
+.rx{margin:40px 0 60px}
+.rx-head{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);padding:44px 48px 36px}
+.rx-head h1{font-size:44px;font-weight:700;letter-spacing:-.03em}
+.rx-head .sub{color:var(--muted);font-size:19px;margin:4px 0 6px}
+.rx-head .meta{font-size:15px;color:var(--soft)}
+.rx-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
+.rx-stats{display:grid;grid-template-columns:repeat(4,1fr);margin:18px 0;background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden}
+.rx-stat{all:unset;cursor:pointer;padding:24px 18px;text-align:center;border-right:1px solid #ececf0;transition:background .2s}
+.rx-stat:last-child{border-right:0}
+.rx-stat:hover,.rx-stat:focus-visible{background:var(--accent-soft)}
+.rx-stat b{display:block;font-size:38px;font-weight:700;letter-spacing:-.03em;line-height:1.1}
+.rx-stat span{display:block;font-size:14px;color:var(--soft);margin-top:4px}
+.rx-stat i{display:block;font-style:normal;font-size:12px;color:var(--accent-ink);margin-top:6px;opacity:0;transition:opacity .2s}
+.rx-stat:hover i,.rx-stat:focus-visible i{opacity:1}
+.rx-card{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);padding:30px 40px;margin:18px 0}
+.rx-card h2{font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--accent-ink);margin-bottom:12px}
+.rx-card p{font-size:17px}
+.rx-skills{display:grid;grid-template-columns:repeat(2,1fr);gap:18px 28px}
+.rx-skills h3{font-size:15px;font-weight:600;margin-bottom:8px}
+.rx-pills{display:flex;flex-wrap:wrap;gap:6px}
+.rx-pills span{font-size:13px;padding:4px 11px;border-radius:980px;background:var(--bg);color:var(--ink)}
+.rx-tl-top{display:flex;justify-content:space-between;align-items:center;margin:34px 4px 6px}
+.rx-tl-top h2{font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--accent-ink)}
+.rx-link{all:unset;cursor:pointer;font-size:14px;color:var(--accent-ink)}
+.rx-link:hover{text-decoration:underline}
+.rx-tl{position:relative;padding-left:34px}
+.rx-tl:before{content:"";position:absolute;left:11px;top:28px;bottom:28px;width:2px;background:var(--line)}
+.rx-job{position:relative;background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);margin:16px 0;transition:box-shadow .25s,transform .25s}
+.rx-job:before{content:"";position:absolute;left:-29px;top:30px;width:12px;height:12px;border-radius:50%;background:var(--card);border:3px solid var(--line);transition:border-color .25s,background .25s}
+.rx-job.open:before{border-color:var(--accent);background:var(--accent)}
+.rx-job:hover{transform:translateY(-1px)}
+.rx-toggle{all:unset;display:block;width:100%;box-sizing:border-box;cursor:pointer;padding:24px 34px 22px;border-radius:var(--r)}
+.rx-toggle:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.rx-row{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.rx-co{font-size:21px;font-weight:700;letter-spacing:-.02em}
+.rx-loc{font-size:14px;color:var(--soft);font-weight:400}
+.rx-title{font-size:16px;font-weight:600;margin-top:2px}
+.rx-scope{font-size:15px;color:var(--muted);margin-top:6px}
+.rx-wins{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.rx-wins span{font-size:13px;font-weight:600;padding:4px 11px;border-radius:980px;background:var(--accent-soft);color:var(--accent-ink)}
+.rx-chev{flex:none;width:28px;height:28px;border-radius:50%;background:var(--bg);display:grid;place-items:center;font-size:14px;color:var(--muted);transition:transform .3s}
+.rx-job.open .rx-chev{transform:rotate(180deg)}
+.rx-body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .35s ease}
+.rx-job.open .rx-body{grid-template-rows:1fr}
+.rx-body>div{overflow:hidden}
+.rx-body ul{list-style:none;margin:0 34px 26px;border-top:1px solid #ececf0;padding-top:14px}
+.rx-body li{position:relative;padding:9px 12px 9px 22px;margin:2px -12px;border-radius:12px;font-size:16px;transition:background .6s}
+.rx-body li:before{content:"";position:absolute;left:8px;top:19px;width:5px;height:5px;border-radius:50%;background:var(--soft)}
+.rx-body li.flash{background:#fff4c2}
+.rx-more{display:inline-block;margin-left:6px;font-size:14px;font-weight:600;white-space:nowrap}
+.rx-hint{text-align:center;font-size:13px;color:var(--soft);margin-top:4px}
+@media(max-width:820px){
+ .rx-head{padding:28px 22px}.rx-head h1{font-size:32px}
+ .rx-stats{grid-template-columns:1fr 1fr}.rx-stat:nth-child(2){border-right:0}.rx-stat:nth-child(-n+2){border-bottom:1px solid #ececf0}
+ .rx-card{padding:24px 22px}.rx-skills{grid-template-columns:1fr}
+ .rx-tl{padding-left:22px}.rx-tl:before{left:5px}.rx-job:before{left:-23px}
+ .rx-toggle{padding:20px 20px 18px}.rx-body ul{margin:0 20px 20px}
+}
+@media print{
+ .nav,footer,.rx-actions,.rx-hint,.rx-tl-top button,.rx-chev,.rx-stat i,.rx-more{display:none!important}
+ body{background:#fff}.rx{margin:0}
+ .rx-head,.rx-stats,.rx-card,.rx-job{box-shadow:none;border:1px solid #e5e5ea}
+ .rx-body{grid-template-rows:1fr!important}.rx-tl:before,.rx-job:before{display:none}.rx-tl{padding-left:0}
+}
+@media(prefers-reduced-motion:reduce){.rx-body,.rx-chev,.rx-job,.rx-body li{transition:none}}
+</style></head><body><nav class="nav"><div class="in"><a class="brand" href="index.html" style="text-decoration:none">Nick Brown</a>
 <div class="links"><a href="index.html#projects">Projects</a><a href="work.html">Work with me</a><a href="index.html#how">How I use AI</a><a href="resume.html">Resume</a><a class="btn primary" style="padding:6px 14px;font-size:14px;color:#fff" href="index.html#contact">Get in touch</a></div></div></nav>
-<main class="wrap"><div class="resume"><h1>Nick Brown</h1><div class="sub">Channel Sales and Partner Programs | Two-Tier Distribution | Network Infrastructure</div><div class="meta">Timonium, MD | nicholas.brown.umd@gmail.com | <a href="https://www.linkedin.com/in/nick--brown">linkedin.com/in/nick--brown</a> | <a href="https://itsnickbrown.github.io">itsnickbrown.github.io</a></div><h2>Executive Summary</h2>
-<p>Channel leader with experience on both sides of two-tier distribution: vendor channel management at NetAlly and supplier portfolio management at Tessco. Finished at 166% of a $5.4M annual quota at NetAlly. Grew a $53M supplier portfolio by $20M a year at Tessco. Uses POS data to catch revenue problems early, builds partner programs that hold up to ROI review, and gets new products selling through distributors and resellers.</p>
-<h2>Core Competencies</h2>
-<p><strong>Channel and Partners:</strong> Two-Tier Channel Strategy | Distributor Management | Partner Recruitment and Enablement | Partner Programs (Deal Registration, SPIFFs, MDF)</p>
-<p><strong>Revenue and Analytics:</strong> Quota Attainment | Revenue Forecasting | POS Analysis | Pricing Strategy</p>
-<p><strong>Go-to-Market:</strong> Product Launch | Channel Marketing | Vendor Management | Contract Negotiation</p>
-<p><strong>Tools:</strong> Salesforce | Dynamics | SAP | AI Workflow Automation (Claude)</p>
-<h2>Professional Experience</h2>
-<h3>NetAlly | Remote</h3>
-<p><strong>Channel Account Manager</strong></p>
-<p><em>Managed national distributors (Anixter/WESCO, Ingram Micro, TD SYNNEX) and a long-tail book of 1,600 resellers for a maker of network test and cybersecurity tools sold only through two-tier distribution.</em></p>
-<ul>
-<li>Finished at 166% of a $450K monthly quota ($5.4M a year) across national distributors and the long-tail reseller book. Drove it through the LinkRunner AT 1500 and LinkRunner 100G launches, new reseller recruitment and deeper selling inside existing partners, including 66% year-over-year growth at a target Cisco reseller.</li>
+<main class="wrap"><div class="rx">
+
+<header class="rx-head"><h1>Nick Brown</h1>
+<div class="sub">Channel Sales and Partner Programs | Two-Tier Distribution | Network Infrastructure</div>
+<div class="meta">Timonium, MD | nicholas.brown.umd@gmail.com | <a href="https://www.linkedin.com/in/nick--brown">linkedin.com/in/nick--brown</a> | <a href="https://itsnickbrown.github.io">itsnickbrown.github.io</a></div>
+<div class="rx-actions"><a class="btn primary" href="resume/Nick_Brown_Resume.pdf">Download PDF</a><a class="btn" href="mailto:nicholas.brown.umd@gmail.com?subject=Saw%20your%20resume">Email me</a><a class="btn" href="index.html#projects">See the projects</a></div>
+</header>
+
+<div class="rx-stats" role="list">
+<button class="rx-stat" data-go="netally" data-hl="quota"><b>166%</b><span>of a $5.4M annual quota</span><i>Show me &rsaquo;</i></button>
+<button class="rx-stat" data-go="tessco" data-hl="grow"><b>+$20M</b><span>a year on a $53M portfolio</span><i>Show me &rsaquo;</i></button>
+<button class="rx-stat" data-go="netally" data-hl="longtail"><b>1,600</b><span>resellers in the channel</span><i>Show me &rsaquo;</i></button>
+<button class="rx-stat" data-go="netally" data-hl="ai"><b>11+</b><span>AI tools built with Claude</span><i>Show me &rsaquo;</i></button>
+</div>
+<p class="rx-hint">Click a number to jump to the work behind it.</p>
+
+<section class="rx-card"><h2>Executive Summary</h2>
+<p>Channel leader with experience on both sides of two-tier distribution: vendor channel management at NetAlly and supplier portfolio management at Tessco. Finished at 166% of a $5.4M annual quota at NetAlly. Grew a $53M supplier portfolio by $20M a year at Tessco. Uses POS data to catch revenue problems early, builds partner programs that hold up to ROI review, and gets new products selling through distributors and resellers.</p></section>
+
+<section class="rx-card"><h2>Core Competencies</h2><div class="rx-skills">
+<div><h3>Channel and Partners</h3><div class="rx-pills"><span>Two-Tier Channel Strategy</span><span>Distributor Management</span><span>Partner Recruitment and Enablement</span><span>Partner Programs (Deal Registration, SPIFFs, MDF)</span></div></div>
+<div><h3>Revenue and Analytics</h3><div class="rx-pills"><span>Quota Attainment</span><span>Revenue Forecasting</span><span>POS Analysis</span><span>Pricing Strategy</span></div></div>
+<div><h3>Go-to-Market</h3><div class="rx-pills"><span>Product Launch</span><span>Channel Marketing</span><span>Vendor Management</span><span>Contract Negotiation</span></div></div>
+<div><h3>Tools</h3><div class="rx-pills"><span>Salesforce</span><span>Dynamics</span><span>SAP</span><span>AI Workflow Automation (Claude)</span></div></div>
+</div></section>
+
+<div class="rx-tl-top"><h2>Professional Experience</h2><button class="rx-link" id="all">Expand all</button></div>
+<div class="rx-tl">
+
+<article class="rx-job open" id="netally"><button class="rx-toggle" aria-expanded="true" aria-controls="b-netally"><div class="rx-row"><div><div class="rx-co">NetAlly <span class="rx-loc">| Remote</span></div><div class="rx-title">Channel Account Manager</div></div><div class="rx-chev">&#9662;</div></div>
+<div class="rx-scope">Managed national distributors (Anixter/WESCO, Ingram Micro, TD SYNNEX) and a long-tail book of 1,600 resellers for a maker of network test and cybersecurity tools sold only through two-tier distribution.</div>
+<div class="rx-wins"><span>166% of quota</span><span>2 product launches</span><span>11+ AI tools</span></div></button>
+<div class="rx-body" id="b-netally"><div><ul>
+<li data-hl="quota">Finished at 166% of a $450K monthly quota ($5.4M a year) across national distributors and the long-tail reseller book. Drove it through the LinkRunner AT 1500 and LinkRunner 100G launches, new reseller recruitment and deeper selling inside existing partners, including 66% year-over-year growth at a target Cisco reseller.</li>
 <li>Found a sharp H2 2025 revenue decline at a national distributor through POS analysis. Escalated to the partner's VP and CRO and launched a utilities and rail push: sales deck, all-sales training, prospect list and vertical outreach.</li>
-<li>Designed a self-service channel for a long tail of 1,600 smaller transactional resellers, built on an Americas-wide partner analysis. Centered on a self-serve channel hub so resellers could get what they need without a channel manager.</li>
+<li data-hl="longtail">Designed a self-service channel for a long tail of 1,600 smaller transactional resellers, built on an Americas-wide partner analysis. Centered on a self-serve channel hub so resellers could get what they need without a channel manager. <a class="rx-more" href="projects/segmentation.html">See how &rsaquo;</a></li>
 <li>Ran partner programs: helped redesign deal registration, launched a reseller SPIFF program, managed MDF and co-op funds with distributors and reviewed incentive spend for ROI.</li>
 <li>Ran channel marketing for the LinkRunner AT 1500 and LinkRunner 100G launches: partner outreach, sales enablement, a revamped partner page and a new bi-weekly reseller newsletter.</li>
-<li>Built the POS reporting framework (YoY trends, monthly heat maps, product deep-dives) and used Ingram Micro POS to find SLED and Federal targets.</li>
-<li>Built 11+ AI tools for partner vetting, POS analysis, account planning and reporting.</li>
+<li>Built the POS reporting framework (YoY trends, monthly heat maps, product deep-dives) and used Ingram Micro POS to find SLED and Federal targets. <a class="rx-more" href="projects/partner-insights.html">See how &rsaquo;</a></li>
+<li data-hl="ai">Built 11+ AI tools for partner vetting, POS analysis, account planning and reporting. <a class="rx-more" href="projects/claude-skills.html">See how &rsaquo;</a></li>
 <li>Recruited new reseller partners, vetted inbound applications and ran distributor QBRs.</li>
-</ul>
-<h3>Tessco Technologies | Hunt Valley, MD</h3>
-<p><strong>Strategic Planner / Vendor Manager</strong></p>
-<p><em>Managed a supplier portfolio with $53M in revenue and $13M in gross profit at a value-added distributor of wireless and network infrastructure products.</em></p>
-<ul>
-<li>Grew annual portfolio revenue by $20M.</li>
+</ul></div></div></article>
+
+<article class="rx-job" id="tessco"><button class="rx-toggle" aria-expanded="false" aria-controls="b-tessco"><div class="rx-row"><div><div class="rx-co">Tessco Technologies <span class="rx-loc">| Hunt Valley, MD</span></div><div class="rx-title">Strategic Planner / Vendor Manager</div></div><div class="rx-chev">&#9662;</div></div>
+<div class="rx-scope">Managed a supplier portfolio with $53M in revenue and $13M in gross profit at a value-added distributor of wireless and network infrastructure products.</div>
+<div class="rx-wins"><span>+$20M a year</span><span>125% portfolio growth</span><span>40% less launch effort</span></div></button>
+<div class="rx-body" id="b-tessco"><div><ul>
+<li data-hl="grow">Grew annual portfolio revenue by $20M.</li>
 <li>Led new product introductions that drove 125% portfolio growth.</li>
 <li>Cut product launch effort 40% through a cross-functional process project.</li>
 <li>Improved vendor performance 30% and lowered inventory costs through regular supplier reviews.</li>
 <li>Built end-of-life procedures and deal registration programs that reduced write-offs and gave sales better visibility into open deals.</li>
 <li>Set competitive pricing, built annual marketing plans with suppliers and ran supplier QBRs from performance data.</li>
 <li>Created partner and customer-specific programs to drive loyalty and revenue.</li>
-</ul>
-<h3>Johns Hopkins University and Johns Hopkins Hospital | Baltimore, MD</h3>
-<p><strong>Early Career: Contracts, Compliance and IT</strong></p>
-<ul>
+</ul></div></div></article>
+
+<article class="rx-job" id="jhu"><button class="rx-toggle" aria-expanded="false" aria-controls="b-jhu"><div class="rx-row"><div><div class="rx-co">Johns Hopkins University and Johns Hopkins Hospital <span class="rx-loc">| Baltimore, MD</span></div><div class="rx-title">Early Career: Contracts, Compliance and IT</div></div><div class="rx-chev">&#9662;</div></div>
+<div class="rx-wins"><span>30+ vendor contracts</span><span>218 providers credentialed</span><span>15% lower tech spend</span></div></button>
+<div class="rx-body" id="b-jhu"><div><ul>
 <li>Contracts Specialist: managed a multimillion-dollar award portfolio and negotiated 30+ vendor contracts, cutting costs 10% and processing time 30%.</li>
 <li>Credentialing and Compliance Coordinator: credentialed 218 providers during COVID-19 and built a compliance tracking system that improved efficiency 40%.</li>
 <li>IT / Multimedia Specialist: cut annual technology spend 15% through vendor negotiation and a new vendor management system.</li>
-</ul>
-<h2>Education</h2>
-<p>Bachelor's degree, Environmental Science, University of Maryland University College</p>
-<div class="resume-actions"><a class="btn primary" href="resume/Nick_Brown_Resume.pdf">Download PDF</a><a class="btn" href="mailto:nicholas.brown.umd@gmail.com?subject=Saw%20your%20resume">Email me</a><a class="btn" href="index.html#projects">See the projects</a></div>
+</ul></div></div></article>
+
+</div>
+
+<section class="rx-card"><h2>Education</h2><p>Bachelor's degree, Environmental Science, University of Maryland University College</p></section>
+<div class="rx-actions" style="justify-content:center"><a class="btn primary" href="resume/Nick_Brown_Resume.pdf">Download PDF</a><a class="btn" href="index.html#projects">See the projects</a></div>
 </div></main><footer><div class="wrap">Built by Nick Brown with Claude. All demo data is synthetic. Hosted free on GitHub Pages.</div></footer>
 <script data-goatcounter="https://itsnickbrown.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+<script>
+(function(){
+const jobs=[...document.querySelectorAll('.rx-job')],allBtn=document.getElementById('all');
+function set(j,open){j.classList.toggle('open',open);j.querySelector('.rx-toggle').setAttribute('aria-expanded',open)}
+function sync(){allBtn.textContent=jobs.every(j=>j.classList.contains('open'))?'Collapse all':'Expand all'}
+jobs.forEach(j=>j.querySelector('.rx-toggle').addEventListener('click',()=>{set(j,!j.classList.contains('open'));sync()}));
+allBtn.addEventListener('click',()=>{const open=!jobs.every(j=>j.classList.contains('open'));jobs.forEach(j=>set(j,open));sync()});
+document.querySelectorAll('.rx-stat').forEach(s=>s.addEventListener('click',()=>{
+ const j=document.getElementById(s.dataset.go);set(j,true);sync();
+ const li=j.querySelector('li[data-hl="'+s.dataset.hl+'"]');
+ setTimeout(()=>{li.scrollIntoView({behavior:'smooth',block:'center'});li.classList.add('flash');setTimeout(()=>li.classList.remove('flash'),1800)},250);
+}));
+window.addEventListener('beforeprint',()=>jobs.forEach(j=>set(j,true)));
+sync();
+})();
+</script>
 <script src="assets/resume-index.js?v=b0f16a5a"></script><script src="assets/bot.js?v=8fcae8a6" data-base=""></script></body></html>
